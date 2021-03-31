@@ -1,0 +1,19 @@
+{
+    "name": "apedrosa/php_loja_web",
+    "type": "project",
+    "authors": [
+        {
+            "name": "AndreGP",
+            "email": "andre18july@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "core\\": "core/"
+        },
+        "files": [
+            "config.php"
+        ]
+    }
+}
