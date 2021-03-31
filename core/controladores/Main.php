@@ -15,24 +15,33 @@ class Main
             "layouts/footer",
             "layouts/htmlFooter"
         ];
-        $dados = [
-            "titulo" => APP_NAME . " " . APP_VERSION,
-            "nomes" => ["andre", "vitor", "miguel", "filipe"]
-        ];
-        Store::carregarView($layouts, $dados);
+
+        Store::carregarView($layouts);
     }
 
     public function loja(){
         //preparar as views
         $layouts = [
             "layouts/htmlHeader",
+            "layouts/header",
             "loja",
+            "layouts/footer",
             "layouts/htmlFooter"
         ];
-        $dados = [
-            "titulo" => "Loja",
-            "loja" => "Loja do Quim"
+
+        Store::carregarView($layouts);
+    }
+
+    public function carrinho() {
+        $layouts = [
+            "layouts/htmlHeader",
+            "layouts/header",
+            "carrinho",
+            "layouts/footer",
+            "layouts/htmlFooter",
         ];
-        Store::carregarView($layouts, $dados);
+
+        Store::carregarView($layouts);
+
     }
 }
