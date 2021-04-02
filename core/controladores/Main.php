@@ -4,6 +4,7 @@ namespace core\controladores;
 
 use core\classes\Store;
 
+
 class Main
 {
     public function index(){
