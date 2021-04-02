@@ -50,6 +50,8 @@ class DataBase
      */
     public function select(string $sql, array $params = null): ?array
     {
+        $sql = trim($sql);
+
         //verifica se é uma instrução SELECT
         if(!preg_match("/^SELECT/i", $sql)) {
             throw new \Exception("Base de dados - Query não é um Select");
@@ -192,6 +194,8 @@ class DataBase
 
     public function statement(string $sql, array $params = null): ?bool
     {
+        $sql = trim($sql);
+
         //verifica se é uma instrução diferente de SELECT, INSERT, UPDATE e DELETE
         if(preg_match("/^(SELECT|INSERT|UPDATE|DELETE)/i", $sql)) {
             throw new \Exception("Base de dados - Query inválida");

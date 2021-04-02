@@ -39,8 +39,8 @@ class Auth
 
         //valida se o user já existe na bd
         $db = new DataBase();
-        $recuperaCliente = $db->select("SELECT email FROM clientes WHERE email = :email",
-            ["email" => $_POST["text_email"]]);
+        $param = ["email" => strtolower(trim($_POST["text_email"]))];
+        $recuperaCliente = $db->select("SELECT email FROM clientes WHERE email = :email", $param);
 
         if (!empty($recuperaCliente)) {
             $_SESSION["erro"] =   "O email já se encontra registado";
