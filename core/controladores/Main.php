@@ -42,6 +42,24 @@ class Main
         ];
 
         Store::carregarView($layouts);
+    }
 
+    public function novoCliente()
+    {
+        //verifica se já existe cliente logado (sessão aberta)
+        if(!Store::clienteLogado()) {
+            $layouts = [
+                "layouts/htmlHeader",
+                "layouts/header",
+                "registo",
+                "layouts/footer",
+                "layouts/htmlFooter",
+            ];
+
+            Store::carregarView($layouts);
+        }else{
+            $this->index();
+            return;
+        }
     }
 }

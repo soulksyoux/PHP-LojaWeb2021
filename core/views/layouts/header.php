@@ -1,6 +1,6 @@
 <?php
     use core\classes\Store;
-    //$_SESSION["cliente"] = "andre";
+    $_SESSION["cliente"] = "andre";
 ?>
 
 
@@ -12,17 +12,18 @@
             </a>
         </div>
         <div class="col-6 text-end p-3">
-            <a href="?a=inicio">Inicio</a>
-            <a href="?a=loja">Loja</a>
+            <a class="navbar-loja-links" href="?a=inicio">Inicio</a>
+            <a class="navbar-loja-links" href="?a=loja">Loja</a>
             <?php if(Store::clienteLogado()): ?>
-                <a href="">Ver Conta</a>
-                <a href="">Logout</a>
+                <a class="navbar-loja-links" href="">Ver Conta</a>
+                <a class="navbar-loja-links" href="">Logout</a>
             <?php else: ?>
-                <a href="">Criar Conta</a>
-                <a href="">Login</a>
+                <a class="navbar-loja-links" href="?a=novo-cliente">Criar Conta</a>
+                <a class="navbar-loja-links" href="">Login</a>
             <?php endif; ?>
             <a href="?a=carrinho"><i class="fas fa-shopping-cart"></i></a>
             <span class="badge bg-info">3</span>
         </div>
     </div>
 </div>
+

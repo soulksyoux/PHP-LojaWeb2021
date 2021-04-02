@@ -7,3 +7,14 @@
     background-color: #adb5bd;
     color: #2c3034;
 }
+
+.navbar-loja-links {
+    text-decoration: none;
+    margin: 0 10px;
+    color: white;
+}
+
+.navbar-loja-links:hover {
+    text-decoration: underline;
+    color: white;
+}

@@ -1,10 +1,12 @@
 <?php
 
+
 //coleção de rotas
 $rotas = [
     "inicio" => "main@index",
     "loja" => "main@loja",
-    "carrinho" => "main@carrinho"
+    "carrinho" => "main@carrinho",
+    "novo-cliente" => "main@novoCliente",
 ];
 
 //define ação por padrão
