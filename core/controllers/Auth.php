@@ -1,10 +1,11 @@
 <?php
 
 
-namespace core\controladores;
+namespace core\controllers;
 
-use core\classes\DataBase;
+use core\classes\Email;
 use core\classes\Store;
+use core\models\Cliente;
 
 class Auth
 {
@@ -38,15 +39,15 @@ class Auth
         }
 
         //valida se o user já existe na bd
-        $db = new DataBase();
-        $param = ["email" => strtolower(trim($_POST["text_email"]))];
-        $recuperaCliente = $db->select("SELECT email FROM clientes WHERE email = :email", $param);
 
-        if (!empty($recuperaCliente)) {
-            $_SESSION["erro"] =   "O email já se encontra registado";
+        $cliente = new Cliente();
+        $email = $_POST["text_email"];
+
+        if($cliente->email_registado($email)){
+            $_SESSION["erro"] = "O email já se encontra registado";
         }
 
-        if($_SESSION["erro"]) {
+        if(!empty($_SESSION["erro"])) {
             $layouts = [
                 "layouts/htmlHeader",
                 "layouts/header",
@@ -59,20 +60,27 @@ class Auth
             return;
         }
 
+        $purl = Store::criarHash(24);
 
-        if ($db->insert("INSERT INTO clientes (email, senha, nome, morada, cidade, telefone) 
-                            VALUES (:email, :senha, :nome, :morada, :cidade, :telefone)",
-            [
-                "email" => $_POST["text_email"],
-                "senha" => $_POST["text_senha_1"],
-                "nome" => $_POST["text_nome_completo"],
-                "morada" => $_POST["text_morada"],
-                "cidade" => $_POST["text_cidade"],
-                "telefone" => $_POST["text_telefone"]
-            ])
-        ) {
-            echo "Registo inserido";
-            return;
+        if($cliente->registar_novo_cliente($purl)) {
+            echo "Registo efetuado!!!";
         }
+
+        $linkPurl = APP_URL . "?a=confirmar_email&purl=$purl";
+
+        $toEmail = "andytod80@gmail.com";
+        $toName = "AndreGP";
+        $subject = "Email de teste";
+        $body = "Este é um email de teste enviado da APP via PHPMailer";
+        $body .= "<br>";
+        $body .= "O link de confirmação é o seguinte:";
+        $body .= "<br><br>";
+        $body .= $linkPurl;
+
+        $mail = new Email();
+        if($mail->enviar_email_confirmacao_novo_cliente($toEmail, $toName, $subject, $body)) {
+            echo "email enviado!!!";
+        }
+
     }
 }

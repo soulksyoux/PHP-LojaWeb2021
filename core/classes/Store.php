@@ -34,4 +34,16 @@ class Store
         return isset($_SESSION["cliente"]);
     }
 
+    /**
+     * @param int $numCaracteres
+     * @return string
+     */
+    public static function criarHash(int $numCaracteres = 12): string {
+        $chars = "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM!#$%&?!#$%&?";
+        $hash = str_shuffle($chars);
+        $offset = rand(0, mb_strlen($hash) - ($numCaracteres + 1));
+        $hash = substr($hash,$offset, $numCaracteres);
+        return $hash;
+    }
+
 }

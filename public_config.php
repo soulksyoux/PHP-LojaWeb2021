@@ -11,3 +11,10 @@ define("MYSQL_USER", "");
 define("MYSQL_PASSWORD", "");
 define("MYSQL_CHARSET", "utf8");
 
+//SITE
+define("APP_URL", "");
+
+
+//EMAIL
+define("APP_EMAIL_ADDRESS", "");
+define("APP_EMAIL_PASS", "");

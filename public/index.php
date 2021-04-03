@@ -2,7 +2,6 @@
 
     //uses para os namespaces
     use \core\classes\DataBase;
-    use core\classes\Store;
 
 
 //abrir a sessao
@@ -40,6 +39,8 @@
 
     //Carregar o sistema de rotas
     require_once "../core/rotas.php";
+
+
 
 
 

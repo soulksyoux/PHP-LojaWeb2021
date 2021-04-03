@@ -26,8 +26,10 @@ if(isset($_GET['a'])) {
 
 //trata a definicao de rota
 $partes = explode("@", $rotas[$acao]);
-$controlador = 'core\\controladores\\' . ucfirst($partes[0]);
+$controlador = 'core\\controllers\\' . ucfirst($partes[0]);
 $metodo = $partes[1];
+
+
 
 $controlador = new $controlador();
 $controlador->$metodo();
