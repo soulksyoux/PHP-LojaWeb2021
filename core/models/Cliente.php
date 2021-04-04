@@ -7,20 +7,6 @@ use core\classes\Store;
 
 class Cliente
 {
-    /**
-     * @var DataBase
-     */
-    private $db;
-
-
-    /**
-     * Cliente constructor.
-     */
-    public function __construct()
-    {
-        $this->db = new DataBase();
-    }
-
 
     /**
      * @return bool
@@ -28,8 +14,9 @@ class Cliente
      */
     public function email_registado($email): bool
     {
+        $db = new DataBase();
         $param = ["email" => strtolower(trim($email))];
-        $recuperaCliente = $this->db->select("SELECT email FROM clientes WHERE email = :email", $param);
+        $recuperaCliente = $db->select("SELECT email FROM clientes WHERE email = :email", $param);
 
         if (empty($recuperaCliente)) {
             return false;
@@ -46,6 +33,8 @@ class Cliente
      */
     public function registar_novo_cliente(string $purl): bool {
 
+
+        $db = new DataBase();
         $params = [
             "email" => strtolower(trim($_POST["text_email"])),
             "senha" => password_hash(trim($_POST["text_senha_1"]),PASSWORD_BCRYPT ),
@@ -56,7 +45,7 @@ class Cliente
             "purl" => $purl
         ];
 
-        if (!$this->db->insert("INSERT INTO clientes (email, senha, nome, morada, cidade, telefone, purl) 
+        if (!$db->insert("INSERT INTO clientes (email, senha, nome, morada, cidade, telefone, purl) 
                             VALUES (:email, :senha, :nome, :morada, :cidade, :telefone, :purl)", $params)
         ) {
             return false;
@@ -64,4 +53,41 @@ class Cliente
 
         return true;
     }
+
+    public function validar_utilizador_apos_registo($purl): bool{
+        $db = new DataBase();
+
+        //tenta recuperar o registo com o purl ja sanitizado
+        try {
+            $cliente = $db->select("SELECT * FROM clientes WHERE purl = :purl", ["purl" => $purl]);
+
+        }catch (\Exception $e) {
+            return false;
+        }
+
+        //valida se o registo recuperado é apenas um
+        if(count($cliente) !== 1) {
+            return false;
+        }
+
+        $params = [
+            "id_cliente" => $cliente[0]->id_cliente,
+            "purl" => "",
+            "ativo" => 1
+        ];
+
+        try {
+            $insere = $db->update("UPDATE clientes SET purl = :purl, ativo = :ativo WHERE id_cliente = :id_cliente", $params);
+        }catch (\Exception $e) {
+            echo null;
+        }
+
+        if(!$insere) {
+            echo "c";
+            return false;
+        }
+
+        return true;
+    }
+
 }

@@ -6,8 +6,21 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
+/**
+ * Class Email
+ * @package core\classes
+ */
 class Email
 {
+
+
+    /**
+     * @param $toEmail
+     * @param $toName
+     * @param $subject
+     * @param $bod
+     * @return bool
+     */
     public function enviar_email_confirmacao_novo_cliente($toEmail, $toName, $subject, $bod): bool
     {
 
@@ -16,6 +29,7 @@ class Email
 
         //Instantiation and passing `true` enables exceptions
         $mail = new PHPMailer(true);
+        $toEmail = mb_strtolower((trim($toEmail)));
 
         try {
             //Server settings
@@ -27,6 +41,7 @@ class Email
             $mail->Password = APP_EMAIL_PASS;                               //SMTP password
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         //Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
             $mail->Port = 587;                                    //TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
+            $mail->CharSet = "UTF-8";
 
             //Recipients
             $mail->setFrom(APP_EMAIL_ADDRESS, "PHP Loja");
@@ -42,7 +57,7 @@ class Email
             return true;
         } catch (Exception $e) {
             echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-            return false;
+            return true;
         }
     }
 

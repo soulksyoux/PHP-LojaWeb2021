@@ -5,8 +5,16 @@ namespace core\controllers;
 use core\classes\Store;
 
 
+/**
+ * Class Main
+ * @package core\controllers
+ */
 class Main
 {
+
+    /**
+     * @throws \Exception
+     */
     public function index(){
         //preparar o layout
         $layouts = [
@@ -20,6 +28,9 @@ class Main
         Store::carregarView($layouts);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function loja(){
         //preparar as views
         $layouts = [
@@ -33,6 +44,9 @@ class Main
         Store::carregarView($layouts);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function carrinho() {
         $layouts = [
             "layouts/htmlHeader",
@@ -45,6 +59,9 @@ class Main
         Store::carregarView($layouts);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function novoCliente()
     {
         //verifica se já existe cliente logado (sessão aberta)

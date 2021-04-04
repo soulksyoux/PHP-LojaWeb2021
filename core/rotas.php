@@ -8,6 +8,8 @@ $rotas = [
     "carrinho" => "main@carrinho",
     "novo-cliente" => "main@novoCliente",
     "registar_user" => "auth@registarUser",
+    "confirmar_email" => "auth@confirmarEmail",
+    "login" => "auth@login",
 ];
 
 //define ação por padrão

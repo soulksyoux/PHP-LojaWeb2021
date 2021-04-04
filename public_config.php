@@ -12,7 +12,7 @@ define("MYSQL_PASSWORD", "");
 define("MYSQL_CHARSET", "utf8");
 
 //SITE
-define("APP_URL", "");
+define("APP_BASE_URL", "");
 
 
 //EMAIL

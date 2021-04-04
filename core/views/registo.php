@@ -65,15 +65,3 @@
         </div>
     </div>
 </div>
-
-
-<!--
-
-email
-senha
-nome
-morada
-cidade
-telefone
-
--->

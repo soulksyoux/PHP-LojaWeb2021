@@ -39,11 +39,19 @@ class Store
      * @return string
      */
     public static function criarHash(int $numCaracteres = 12): string {
-        $chars = "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM!#$%&?!#$%&?";
+        $chars = "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
         $hash = str_shuffle($chars);
         $offset = rand(0, mb_strlen($hash) - ($numCaracteres + 1));
         $hash = substr($hash,$offset, $numCaracteres);
         return $hash;
+    }
+
+
+    /**
+     * @param string $rota
+     */
+    public static function redirect(string $rota = ""): void {
+        header("Location: " . APP_BASE_URL . "?a=$rota");
     }
 
 }
