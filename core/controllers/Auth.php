@@ -158,7 +158,8 @@ class Auth
 
     public function login() {
         if(Store::clienteLogado()) {
-            $_SESSION["erro"] = "Já existe um cliente logado!";
+            Store::redirect();
+            return;
         }
 
         $layouts = [
@@ -188,22 +189,21 @@ class Auth
 
         // validar se existe já uma sessão logada
         if(Store::clienteLogado()) {
-            $_SESSION["erro"] = "Já existe um cliente logado!";
-            Store::redirect("login");
+            Store::redirect("");
+            return;
         }
 
         //var_dump(Store::clienteLogado(), $_SESSION);
 
         // validar se existe um post com os dados de email e password
-        if(empty($_POST)) {
-            $_SESSION["erro"] = "Não existem dados de login";
-            echo "Não existem dados de login";
+        if($_SERVER["REQUEST_METHOD"] != 'POST') {
+            Store::redirect("");
             return;
         }
 
-        if(empty($_POST["text_email"]) || empty($_POST["text_senha_1"])) {
-            $_SESSION["erro"] = "Email ou senha inválidos";
-            echo "Email ou senha inválidos";
+        if(empty($_POST["text_email"]) || empty($_POST["text_senha_1"]) || !filter_var(trim($_POST["text_email"]), FILTER_VALIDATE_EMAIL)) {
+            $_SESSION["erro"] = "Dados de email ou senha inválidos!!";
+            Store::redirect("login");
             return;
         }
 

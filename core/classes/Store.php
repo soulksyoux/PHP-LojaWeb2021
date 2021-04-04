@@ -51,7 +51,8 @@ class Store
      * @param string $rota
      */
     public static function redirect(string $rota = ""): void {
-        header("Location: " . APP_BASE_URL . "?a=$rota");
+        $rota = empty($rota) ? "" : "?a=$rota";
+        header("Location: " . APP_BASE_URL . $rota);
     }
 
 }
