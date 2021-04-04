@@ -90,4 +90,31 @@ class Cliente
         return true;
     }
 
+
+    public function validar_login($dados)
+    {
+        $db = new DataBase();
+
+        // validar se o email enviado no form corresponde a 1 registo na bd
+        $cliente = $db->select("SELECT * FROM clientes WHERE email = :email AND ativo = 1", ["email" => $dados["email"]]);
+
+        //var_dump($cliente);
+
+        if(count($cliente) != 1) {
+            echo "cliente nao encontrado";
+            return false;
+        }
+
+        // validar se a password corresponde após de usar o hash
+        //var_dump($dados["senha"], $cliente[0]->senha);
+
+        if(!password_verify($dados["senha"], $cliente[0]->senha)){
+            echo "senha inválida";
+            return false;
+        }
+
+        $_SESSION["cliente"] = $cliente[0]->id_cliente;
+        return true;
+    }
+
 }

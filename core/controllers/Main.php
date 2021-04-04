@@ -32,6 +32,10 @@ class Main
      * @throws \Exception
      */
     public function loja(){
+        if(empty($_SESSION["cliente"])) {
+            Store::redirect();
+        }
+
         //preparar as views
         $layouts = [
             "layouts/htmlHeader",

@@ -157,6 +157,10 @@ class Auth
     }
 
     public function login() {
+        if(Store::clienteLogado()) {
+            $_SESSION["erro"] = "Já existe um cliente logado!";
+        }
+
         $layouts = [
             "layouts/htmlHeader",
             "layouts/header",
@@ -169,5 +173,63 @@ class Auth
         return;
     }
 
+    public function validarLogin() {
+        // validar se existe já uma sessão logada
+        // validar se existe um post com os dados de email e password
+        // validar se o email enviado no form corresponde a 1 registo na bd
+        // validar se o registo recuperado tem o estado ativo = 1
+        // validar se a password corresponde após de usar o hash
+        // criar uma sessão com o id do user
+        // reencaminhar para a página de inicio
+
+
+        //$_SESSION["cliente"] = "andre"; -> apagar
+
+
+        // validar se existe já uma sessão logada
+        if(Store::clienteLogado()) {
+            $_SESSION["erro"] = "Já existe um cliente logado!";
+            Store::redirect("login");
+        }
+
+        //var_dump(Store::clienteLogado(), $_SESSION);
+
+        // validar se existe um post com os dados de email e password
+        if(empty($_POST)) {
+            $_SESSION["erro"] = "Não existem dados de login";
+            echo "Não existem dados de login";
+            return;
+        }
+
+        if(empty($_POST["text_email"]) || empty($_POST["text_senha_1"])) {
+            $_SESSION["erro"] = "Email ou senha inválidos";
+            echo "Email ou senha inválidos";
+            return;
+        }
+
+        // validar se o email enviado no form corresponde a 1 registo na bd
+        $cliente = new Cliente();
+
+        $dados_login = [
+            "email" => $_POST["text_email"],
+            "senha" => $_POST["text_senha_1"]
+        ];
+
+        if(!$cliente->validar_login($dados_login)){
+            $_SESSION["erro"] = "Email ou senha inválidos";
+            echo "Erro ao validar cliente";
+            return;
+        }
+
+
+        Store::redirect("loja");
+        //echo "Login com sucesso!!!";
+    }
+
+    public function logout()
+    {
+        $_SESSION["cliente"] = null;
+        Store::redirect("");
+    }
 
 }

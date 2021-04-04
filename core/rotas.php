@@ -10,6 +10,8 @@ $rotas = [
     "registar_user" => "auth@registarUser",
     "confirmar_email" => "auth@confirmarEmail",
     "login" => "auth@login",
+    "login_user" => "auth@validarLogin",
+    "logout" => "auth@logout",
 ];
 
 //define ação por padrão
