@@ -2,6 +2,7 @@
     use core\classes\Store;
     //$_SESSION["cliente"] = "andre";
 
+
 ?>
 
 

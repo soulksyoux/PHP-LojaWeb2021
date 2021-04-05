@@ -18,3 +18,11 @@
     text-decoration: underline;
     color: white;
 }
+
+* {
+    box-shadow: inset 0px 0px 1px red;
+}
+
+.espaco-fundo {
+    margin-bottom: 80px;
+}

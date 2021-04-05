@@ -3,6 +3,7 @@
 namespace core\controllers;
 
 use core\classes\Store;
+use core\models\Produto;
 
 
 /**
@@ -32,9 +33,20 @@ class Main
      * @throws \Exception
      */
     public function loja(){
-        if(empty($_SESSION["cliente"])) {
+
+        //valida se existe user na sessao
+        if(!Store::clienteLogado() || !Store::valida_user_em_sessao()) {
             Store::redirect();
+            return;
         }
+
+        $produtos = new Produto();
+        $produtos = $produtos->lista_produtos();
+
+        if(empty($produtos)) {
+            die("Não existem produtos disponiveis");
+        }
+
 
         //preparar as views
         $layouts = [
@@ -45,7 +57,7 @@ class Main
             "layouts/htmlFooter"
         ];
 
-        Store::carregarView($layouts);
+        Store::carregarView($layouts, ["produtos" => $produtos]);
     }
 
     /**
