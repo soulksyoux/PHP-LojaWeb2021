@@ -1,6 +1,6 @@
 <div class="container-fluid">
     <div class="row my-5">
-        <div class="col-sm-6 offset-sm-3">
+        <div class="col-sm-6 offset-sm-3 mb-5">
             <h3 class="text-center"><?= "Registar novo user"; ?></h3>
 
             <form action="?a=registar_user" method="post">

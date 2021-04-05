@@ -33,11 +33,22 @@ class Auth
         if (empty($_POST['text_email']) && empty($_POST['text_senha_1']) && empty($_POST['text_senha_2'])
             && empty($_POST['text_nome']) && empty($_POST['text_morada']) && empty($_POST['text_cidade'])) {
             $_SESSION["erro"] = "Post tem dados em falta";
+            Store::redirect("novo-cliente");
+            return;
+        }
+
+        //valida se a senha tem mais de 4 caracteres
+        if(mb_strlen($_POST["text_senha_1"]) < 4) {
+            $_SESSION["erro"] = "A senha tem de ter mais de 3 caracteres";
+            Store::redirect("novo-cliente");
+            return;
         }
 
         //valida se a senha 1 é igual à senha de confirmação 2
         if ($_POST['text_senha_1'] !== $_POST['text_senha_2']) {
             $_SESSION["erro"] = "As senhas nao sao iguais";
+            Store::redirect("novo-cliente");
+            return;
         }
 
         //valida se o user já existe na bd
@@ -47,18 +58,7 @@ class Auth
 
         if ($cliente->email_registado($email)) {
             $_SESSION["erro"] = "O email já se encontra registado";
-        }
-
-        if (!empty($_SESSION["erro"])) {
-            $layouts = [
-                "layouts/htmlHeader",
-                "layouts/header",
-                "registo",
-                "layouts/footer",
-                "layouts/htmlFooter",
-            ];
-
-            Store::carregarView($layouts);
+            Store::redirect("novo-cliente");
             return;
         }
 
@@ -67,10 +67,9 @@ class Auth
 
         if (!$cliente->registar_novo_cliente($purl)) {
             $_SESSION["erro"] = "Erro no registo!";
+            Store::redirect("novo-cliente");
             return;
         }
-
-
 
         $linkPurl = APP_BASE_URL . "?a=confirmar_email&purl=$purl";
 
@@ -84,6 +83,7 @@ class Auth
 
         if (!$mail->enviar_email_confirmacao_novo_cliente($toEmail, $toName, $subject, $body)) {
             $_SESSION["erro"] = "Erro no registo!";
+            Store::redirect("novo-cliente");
             return;
         }
 
@@ -202,7 +202,7 @@ class Auth
         }
 
         if(empty($_POST["text_email"]) || empty($_POST["text_senha_1"]) || !filter_var(trim($_POST["text_email"]), FILTER_VALIDATE_EMAIL)) {
-            $_SESSION["erro"] = "Dados de email ou senha inválidos!!";
+            $_SESSION["erro"] = "Dados de login inválidos!!";
             Store::redirect("login");
             return;
         }
@@ -211,13 +211,13 @@ class Auth
         $cliente = new Cliente();
 
         $dados_login = [
-            "email" => $_POST["text_email"],
+            "email" => strtolower(trim($_POST["text_email"])),
             "senha" => $_POST["text_senha_1"]
         ];
 
         if(!$cliente->validar_login($dados_login)){
-            $_SESSION["erro"] = "Email ou senha inválidos";
-            echo "Erro ao validar cliente";
+            $_SESSION["erro"] = "Dados de login inválidos!!";
+            Store::redirect("login");
             return;
         }
 

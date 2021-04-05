@@ -96,12 +96,12 @@ class Cliente
         $db = new DataBase();
 
         // validar se o email enviado no form corresponde a 1 registo na bd
-        $cliente = $db->select("SELECT * FROM clientes WHERE email = :email AND ativo = 1", ["email" => $dados["email"]]);
+        $cliente = $db->select("SELECT * FROM clientes WHERE email = :email AND ativo = 1 AND deleted_at IS NULL", ["email" => $dados["email"]]);
 
         //var_dump($cliente);
 
         if(count($cliente) != 1) {
-            echo "cliente nao encontrado";
+            //echo "cliente nao encontrado";
             return false;
         }
 
@@ -109,7 +109,7 @@ class Cliente
         //var_dump($dados["senha"], $cliente[0]->senha);
 
         if(!password_verify($dados["senha"], $cliente[0]->senha)){
-            echo "senha inválida";
+            //echo "senha inválida";
             return false;
         }
 
