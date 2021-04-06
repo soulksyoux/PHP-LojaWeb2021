@@ -40,13 +40,15 @@ class Main
             return;
         }
 
+        //analisa que categoria mostra
+
         $produtos = new Produto();
-        $produtos = $produtos->lista_produtos();
 
-        if(empty($produtos)) {
-            die("Não existem produtos disponiveis");
+        if($_SERVER['REQUEST_METHOD'] == 'GET' && !empty($_GET['c'])) {
+            $produtos = $produtos->lista_produtos($_GET['c']);
+        }else{
+            $produtos = $produtos->lista_produtos();
         }
-
 
         //preparar as views
         $layouts = [

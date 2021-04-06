@@ -5,6 +5,7 @@
 $rotas = [
     "inicio" => "main@index",
     "loja" => "main@loja",
+    "loja" => "main@loja",
     "carrinho" => "main@carrinho",
     "novo-cliente" => "main@novoCliente",
     "registar_user" => "auth@registarUser",
