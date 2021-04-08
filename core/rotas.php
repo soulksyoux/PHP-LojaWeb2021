@@ -6,8 +6,11 @@ $rotas = [
     "inicio" => "main@index",
     "loja" => "main@loja",
     "loja" => "main@loja",
-    "carrinho" => "main@carrinho",
     "novo-cliente" => "main@novoCliente",
+
+    "carrinho" => "carrinho@carrinho",
+    "adicionar_carrinho" => "carrinho@adicionarCarrinho",
+
     "registar_user" => "auth@registarUser",
     "confirmar_email" => "auth@confirmarEmail",
     "login" => "auth@login",

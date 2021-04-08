@@ -5,7 +5,6 @@
 
 ?>
 
-
 <div class="container-fluid navegacao">
     <div class="row">
         <div class="col-6 p-3">
@@ -24,7 +23,7 @@
                 <a class="navbar-loja-links" href="?a=login">Login</a>
             <?php endif; ?>
             <a href="?a=carrinho"><i class="fas fa-shopping-cart"></i></a>
-            <span class="badge bg-info">3</span>
+            <span class="badge bg-info">0</span>
         </div>
     </div>
 </div>

@@ -44,11 +44,15 @@ class Main
 
         $produtos = new Produto();
 
+        $categorias = $produtos->lista_categorias();
+
         if($_SERVER['REQUEST_METHOD'] == 'GET' && !empty($_GET['c'])) {
             $produtos = $produtos->lista_produtos($_GET['c']);
         }else{
             $produtos = $produtos->lista_produtos();
         }
+
+
 
         //preparar as views
         $layouts = [
@@ -59,22 +63,7 @@ class Main
             "layouts/htmlFooter"
         ];
 
-        Store::carregarView($layouts, ["produtos" => $produtos]);
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function carrinho() {
-        $layouts = [
-            "layouts/htmlHeader",
-            "layouts/header",
-            "carrinho",
-            "layouts/footer",
-            "layouts/htmlFooter",
-        ];
-
-        Store::carregarView($layouts);
+        Store::carregarView($layouts, ["produtos" => $produtos, "categorias" => $categorias]);
     }
 
     /**
