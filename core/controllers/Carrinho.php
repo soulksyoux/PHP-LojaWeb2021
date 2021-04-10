@@ -56,4 +56,10 @@ class Carrinho
         $_SESSION["carrinho"] = $carrinho;
         echo $total;
     }
+
+
+    public function limparCarrinho() {
+        $_SESSION["carrinho"] = [];
+        echo 0;
+    }
 }

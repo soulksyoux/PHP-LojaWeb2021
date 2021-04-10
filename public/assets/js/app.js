@@ -15,6 +15,15 @@ const adicionarItemCarrinho1 = async (id_prod) => {
     }
 }
 
+const limparCarrinho = async () => {
+    try{
+        const res = await axios.get("?a=limpar_carrinho");
+        $(".badge.bg-info").html(res.data == 0 ? "" : res.data);
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 //utilizando o fetch para chamada asincrona com promises
 function adicionarItemCarrinho2(id_prod) {
     var Headers = {

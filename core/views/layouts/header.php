@@ -1,7 +1,12 @@
 <?php
     use core\classes\Store;
     //$_SESSION["cliente"] = "andre";
-
+    $totalCarrinho = 0;
+    if(!empty($_SESSION["carrinho"])) {
+        foreach ($_SESSION["carrinho"] as $produto) {
+            $totalCarrinho += $produto;
+        }
+    }
 
 ?>
 
@@ -23,7 +28,7 @@
                 <a class="navbar-loja-links" href="?a=login">Login</a>
             <?php endif; ?>
             <a href="?a=carrinho"><i class="fas fa-shopping-cart"></i></a>
-            <span class="badge bg-info">0</span>
+            <span class="badge bg-info"><?= $totalCarrinho == 0 ? "" : $totalCarrinho; ?></span>
         </div>
     </div>
 </div>
