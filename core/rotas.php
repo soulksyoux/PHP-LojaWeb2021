@@ -44,6 +44,9 @@ $controlador = new $controlador();
 $controlador->$metodo();
 
 
+echo "teste";
+
+
 
 
 
