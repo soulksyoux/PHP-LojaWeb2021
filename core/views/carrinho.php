@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-12">
             <h1>Carrinho de compras</h1>
-            <button onclick="limparCarrinho()">Esvaziar carrinho</button>
+            <a href="?a=limpar_carrinho" class="btn btn-primary btn-sm">Limpar carrinho</a>
             <?php var_dump($_SESSION); ?>
             <?php if(!empty($_SESSION["carrinho"])): ?>
                 <ul>

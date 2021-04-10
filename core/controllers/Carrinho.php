@@ -27,39 +27,55 @@ class Carrinho
 
     public function adicionarCarrinho()
     {
-        //capturar o carrinho
+
+        $id_produto = $_GET['id_produto'];
+
+        $produtos = new Produto();
+        $resultado = $produtos->validar_stock($id_produto);
+        if(!$resultado) {
+            $total_aux = 0;
+            if(!empty($_SESSION["carrinho"])) {
+                foreach ($_SESSION["carrinho"] as $qtd) {
+                    $total_aux += $qtd;
+                }
+            }
+            echo $total_aux == 0 ? "" : $total_aux;
+            return;
+        }
+
+        // adiciona/gestão da variável de SESSAO do carrinho
         $carrinho = [];
 
-        if(empty($_SESSION["carrinho"])) {
-            $_SESSION["total"] = 0;
+        if(isset($_SESSION['carrinho'])){
+            $carrinho = $_SESSION['carrinho'];
         }
 
-        if(!empty($_SESSION["carrinho"])) {
-            $carrinho = $_SESSION["carrinho"];
+        // adicionar o produto ao carrinho
+        if(key_exists($id_produto, $carrinho)){
+
+            // já existe o produto. Acrescenta mais uma unidade
+            $carrinho[$id_produto]++;
+
+        } else {
+
+            // adicionar novo produto ao carrinho
+            $carrinho[$id_produto] = 1;
         }
 
+        // atualiza os dados do carrinho na sessão
+        $_SESSION['carrinho'] = $carrinho;
 
-        if(!empty($_GET["id_produto"])) {
-            $id_produto = $_GET["id_produto"];
-            if(empty($carrinho[$id_produto])) {
-                $carrinho[$id_produto] = 1;
-            }elseif($carrinho[$id_produto] >= 1) {
-                $carrinho[$id_produto]++;
-            }
+        // devolve a resposta (número de produtos do carrinho)
+        $total_produtos = 0;
+        foreach($carrinho as $quantidade){
+            $total_produtos += $quantidade;
         }
-
-        $total = 0;
-        foreach ($carrinho as $produto_qtd) {
-            $total += $produto_qtd;
-        }
-
-        $_SESSION["carrinho"] = $carrinho;
-        echo $total;
+        echo $total_produtos;
     }
 
 
     public function limparCarrinho() {
-        $_SESSION["carrinho"] = [];
-        echo 0;
+        unset($_SESSION["carrinho"]);
+        $this->carrinho();
     }
 }

@@ -20,7 +20,11 @@
                         <h2><?= $produto->nome_produto; ?></h2>
                         <h3><?= $produto->preco; ?></h3>
                         <div>
-                            <button class="btn btn-outline-primary" onclick="adicionarItemCarrinho1(<?php echo $produto->id_produto; ?>)">Adicionar ao carrinho</button>
+                            <?php if($produto->stock > 0): ?>
+                                <button class="btn btn-outline-primary" onclick="adicionarItemCarrinho1(<?php echo $produto->id_produto; ?>)">Adicionar ao carrinho</button>
+                            <?php else: ?>
+                                <button disabled class="btn btn-outline-danger">Sem stock</button>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>

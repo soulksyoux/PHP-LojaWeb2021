@@ -7,9 +7,13 @@ function adicionarItemCarrinho(id_prod) {
 }
 
 const adicionarItemCarrinho1 = async (id_prod) => {
+
     try{
-        const res = await axios.get("?a=adicionar_carrinho&id_produto=" + id_prod);
-        $(".badge.bg-info").html(res.data);
+        if(id_prod) {
+            const res = await axios.get("?a=adicionar_carrinho&id_produto=" + id_prod);
+            $(".badge.bg-info").html(res.data);
+        }
+
     } catch (err) {
         console.log(err);
     }

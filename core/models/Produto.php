@@ -21,7 +21,7 @@ class Produto
         }
 
         try {
-            $produtos = $db->select("SELECT * FROM produtos WHERE visivel = 1 AND stock > 0 AND delected_at IS NULL " . $categoria, $params);
+            $produtos = $db->select("SELECT * FROM produtos WHERE visivel = 1 AND delected_at IS NULL " . $categoria, $params);
         } catch (\Exception $e) {
             echo "Erro ao recuperar produtos da bd";
             return null;
@@ -59,13 +59,26 @@ class Produto
 
         $db = new DataBase();
         $params = ["id" => $id];
-        $find = $db->select("SELECT * FROM produtos WHERE id_produto = :id AND visivel = 1 AND stock > 0 AND delected_at IS NULL", $params);
+        $find = $db->select("SELECT * FROM produtos WHERE id_produto = :id AND visivel = 1 AND delected_at IS NULL", $params);
 
         if(empty($find) || count($find) != 1) {
             return null;
         }
 
         return $find[0];
+    }
+
+    public function validar_stock(int $id): bool
+    {
+        $db = new DataBase();
+        $params = ["id" => $id];
+
+        $find = $db->select("SELECT * FROM produtos WHERE id_produto = :id AND visivel = 1 AND stock > 0 AND delected_at IS NULL", $params);
+        if(empty($find)) {
+            return false;
+        }
+
+        return true;
     }
     
 }
