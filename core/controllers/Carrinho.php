@@ -23,7 +23,7 @@ class Carrinho
                 $produtos = new Produto();
                 $find = $produtos->get_produto_by_id($key);
 
-                if(!empty($find)) {
+                if(!empty($find) && $qtd >= 1) {
                     array_push($carrinho, [
                         "id_produto" => $find->id_produto,
                         "nome_produto" => $find->nome_produto,
@@ -95,9 +95,34 @@ class Carrinho
         echo $total_produtos;
     }
 
+    public function diminuirQtdItem()
+    {
+        if(empty($_GET["id_produto"])) {
+            return;
+        }
+
+        $id_produto = $_GET["id_produto"];
+
+        //diminuir a quantidade em 1 na session correspondente ao id do produto passado
+        if(!empty($_SESSION["carrinho"][$id_produto]) && $_SESSION["carrinho"][$id_produto] > 0) {
+            $_SESSION["carrinho"][$id_produto]--;
+        }
+
+        $quantidade = 0;
+        if(!empty($_SESSION["carrinho"])) {
+            foreach ($_SESSION["carrinho"] as $qtd) {
+                $quantidade += $qtd;
+            }
+        }
+
+        echo json_encode(["carrinho" => $_SESSION["carrinho"], "quantidade" => $quantidade]);
+
+    }
 
     public function limparCarrinho() {
         unset($_SESSION["carrinho"]);
         $this->carrinho();
     }
+
+
 }

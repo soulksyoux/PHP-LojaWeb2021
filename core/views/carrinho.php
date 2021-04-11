@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <div style="margin-bottom: 100px; padding: 20px;" class="row">
-        <div class="col-12">
-            <h1>Carrinho de compras</h1>
+        <div id="carrinho_container" class="col-12">
+            <h2 class="my-4">A sua encomenda:</h2>
 
             <?php if(!empty($carrinho)): ?>
 
@@ -9,13 +9,13 @@
                 <table class="table">
                     <thead>
                     <tr>
-                        <th scope="col">#</th>
+                        <th class="center" scope="col">#</th>
                         <th scope="col">Imagem</th>
                         <th scope="col">Designação</th>
                         <th scope="col">Quantidade</th>
                         <th class="text-end" scope="col">Preço unitário</th>
                         <th class="text-end" scope="col">Sub-total</th>
-                        <th scope="col">Ações</th>
+                        <th class="text-center" scope="col">Ações</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -23,17 +23,17 @@
                     <?php $total = 0; ?>
                     <?php foreach ($carrinho as $key => $produto): ?>
 
-                    <tr>
+                    <tr id="linha_carrinho_<?= $produto['id_produto']; ?>">
                         <th scope="row"><?= $key + 1  ?></th>
                         <td><img width="80" src="assets/images/produtos/<?= $produto['imagem'] ?>" alt="t-shirt vermelha"
                                  class="img-fluid"></td>
                         <td><?= $produto["nome_produto"] ?></td>
-                        <td><?= $produto["quantidade"] ?></td>
-                        <td class="text-end"><?= number_format($produto["preco"], 2, '.', ''); ?> $</td>
-                        <td class="text-end"><?= number_format(($produto['preco'] * $produto['quantidade']), 2, '.', ''); ?> $</td>
-                        <td>
+                        <td id="quant_id<?= $produto['id_produto']; ?>"><?= $produto["quantidade"] ?></td>
+                        <td id="precounitario_id_<?= $produto['id_produto']; ?>" class="text-end"><?= number_format($produto["preco"], 2, '.', ''); ?> $</td>
+                        <td id="subtotal_id_<?= $produto['id_produto']; ?>" class="text-end"><?= number_format(($produto['preco'] * $produto['quantidade']), 2, '.', ''); ?> $</td>
+                        <td class="text-center" >
                             <a href=""><i class="fas fa-plus me-2 text-success"></i></a>
-                            <a href=""><i class="fas fa-minus text-danger"></i></a>
+                            <a href="#" onclick="diminuir_qtd_item_carrinho(<?= $produto['id_produto']; ?>)"><i class="fas fa-minus text-danger"></i></a>
                         </td>
                     </tr>
 
@@ -43,7 +43,7 @@
                     <tr>
                         <td colspan="4"></td>
                         <td class="fw-bold text-end">Total:</td>
-                        <td class="text-end"><?= number_format($total, 2, '.', ''); ?> $</td>
+                        <td id="carrinho_total" class="text-end"><?= number_format($total, 2, '.', ''); ?> $</td>
                         <td></td>
                     </tr>
 
@@ -51,16 +51,24 @@
                     </tbody>
                 </table>
 
-                <div class="position-relative">
-                    <a href="?a=limpar_carrinho" class="btn btn-primary btn-sm top-0 start-0">Limpar carrinho</a>
-                    <a href="?a=finalizar_compra" class="btn btn-success btn-sm position-absolute top-0 end-0 me-2">Finalizar compra</a>
-
+                <div class="row">
+                    <div class="col"><a href="?a=limpar_carrinho" class="btn btn-primary btn-sm">Limpar carrinho</a></div>
+                    <div class="col text-end">
+                        <a href="?a=loja" class="btn btn-primary btn-sm">Continuar a comprar</a>
+                        <a href="?a=finalizar_compra" class="btn btn-primary btn-sm">Finalizar compra</a>
+                    </div>
                 </div>
 
 
             <?php else: ?>
                 <div class="alert alert-warning mt-4" role="alert">
                     Carrinho Vazio!!!
+                </div>
+
+                <div class="row">
+                    <div class="col text-center">
+                        <a href="?a=loja" class="btn btn-primary">Ir para a loja</a>
+                    </div>
                 </div>
             <?php endif; ?>
         </div>
