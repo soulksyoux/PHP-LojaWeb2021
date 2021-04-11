@@ -24,13 +24,13 @@ class Carrinho
                 $find = $produtos->get_produto_by_id($key);
 
                 if(!empty($find)) {
-                    $carrinho[] = [
+                    array_push($carrinho, [
                         "id_produto" => $find->id_produto,
                         "nome_produto" => $find->nome_produto,
                         "preco" => $find->preco,
                         "imagem" => $find->imagem,
                         "quantidade" => $_SESSION["carrinho"][$key]
-                    ];
+                    ]);
                 }
             }
         }
