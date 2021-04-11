@@ -13,6 +13,28 @@ class Carrinho
      */
     public function carrinho() {
 
+        //montar carrinho com dados apartir da bd
+
+        $carrinho = [];
+
+        if(!empty($_SESSION["carrinho"])) {
+            foreach ($_SESSION["carrinho"] as $key => $qtd) {
+
+                $produtos = new Produto();
+                $find = $produtos->get_produto_by_id($key);
+
+                if(!empty($find)) {
+                    $carrinho[] = [
+                        "id_produto" => $find->id_produto,
+                        "nome_produto" => $find->nome_produto,
+                        "preco" => $find->preco,
+                        "imagem" => $find->imagem,
+                        "quantidade" => $_SESSION["carrinho"][$key]
+                    ];
+                }
+            }
+        }
+
         $layouts = [
             "layouts/htmlHeader",
             "layouts/header",
@@ -21,7 +43,7 @@ class Carrinho
             "layouts/htmlFooter",
         ];
 
-        Store::carregarView($layouts);
+        Store::carregarView($layouts, ["carrinho" => $carrinho]);
     }
 
 
