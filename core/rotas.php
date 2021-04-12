@@ -12,6 +12,7 @@ $rotas = [
     "adicionar_carrinho" => "carrinho@adicionarCarrinho",
     "limpar_carrinho" => "carrinho@limparCarrinho",
     "diminuir_qtd_item" => "carrinho@diminuirQtdItem",
+    "aumentar_qtd_item_carrinho" => "carrinho@aumentarQtdItemCarrinho",
 
     "registar_user" => "auth@registarUser",
     "confirmar_email" => "auth@confirmarEmail",

@@ -132,4 +132,13 @@ async function diminuir_qtd_item_carrinho(id_prod) {
 }
 
 
+function confirmar_limpar_carrinho() {
+    $("#confirm_limpa_carrrinho_box").removeAttr('hidden');
+}
+
+function nao_limpar_carrinho() {
+    $("#confirm_limpa_carrrinho_box").attr('hidden', 'true');
+}
+
+
 

@@ -32,7 +32,7 @@
                         <td id="precounitario_id_<?= $produto['id_produto']; ?>" class="text-end"><?= number_format($produto["preco"], 2, '.', ''); ?> $</td>
                         <td id="subtotal_id_<?= $produto['id_produto']; ?>" class="text-end"><?= number_format(($produto['preco'] * $produto['quantidade']), 2, '.', ''); ?> $</td>
                         <td class="text-center" >
-                            <a href=""><i class="fas fa-plus me-2 text-success"></i></a>
+                            <a href="?a=aumentar_qtd_item_carrinho&id_produto=<?= $produto['id_produto']; ?>"><i class="fas fa-plus me-2 text-success"></i></a>
                             <a href="#" onclick="diminuir_qtd_item_carrinho(<?= $produto['id_produto']; ?>)"><i class="fas fa-minus text-danger"></i></a>
                         </td>
                     </tr>
@@ -52,7 +52,14 @@
                 </table>
 
                 <div class="row">
-                    <div class="col"><a href="?a=limpar_carrinho" class="btn btn-primary btn-sm">Limpar carrinho</a></div>
+                    <div class="col">
+                        <a href="#" id="confirm_limpa_carrrinho_btn" onclick="confirmar_limpar_carrinho()" class="btn btn-primary btn-sm">Limpar carrinho</a>
+                        <span id="confirm_limpa_carrrinho_box" hidden class="ms-2">
+                            <span>Tem a certeza?</span>
+                            <a href="?a=limpar_carrinho" class="">Sim</a>
+                            <a href="#" onclick="nao_limpar_carrinho()" class="">Não</a>
+                        </span>
+                    </div>
                     <div class="col text-end">
                         <a href="?a=loja" class="btn btn-primary btn-sm">Continuar a comprar</a>
                         <a href="?a=finalizar_compra" class="btn btn-primary btn-sm">Finalizar compra</a>

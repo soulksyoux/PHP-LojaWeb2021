@@ -119,10 +119,30 @@ class Carrinho
 
     }
 
+    public function aumentarQtdItemCarrinho()
+    {
+
+        if(empty($_GET["id_produto"])) {
+            return;
+        }
+
+        $id_produto = $_GET["id_produto"];
+
+
+        if(empty($_SESSION["carrinho"][$id_produto])) {
+            return;
+        }
+
+        $_SESSION["carrinho"][$id_produto]++;
+
+        header("Location: " . APP_BASE_URL . "?a=carrinho");
+    }
+
     public function limparCarrinho() {
         unset($_SESSION["carrinho"]);
         $this->carrinho();
     }
+
 
 
 }
