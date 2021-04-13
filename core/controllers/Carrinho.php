@@ -4,6 +4,7 @@
 namespace core\controllers;
 
 use core\classes\Store;
+use core\models\Cliente;
 use core\models\Produto;
 
 class Carrinho
@@ -138,11 +139,96 @@ class Carrinho
         header("Location: " . APP_BASE_URL . "?a=carrinho");
     }
 
+    public function finalizarEncomenda()
+    {
+        //validar se utilizador logado
+        if(empty($_SESSION["cliente"])) {
+            //user nao logado
+
+            $_SESSION["tmp_carrinho"] = true;
+            Store::redirect("login");
+            return;
+        }
+
+        Store::redirect("finalizar_encomenda_resumo");
+
+    }
+
     public function limparCarrinho() {
         unset($_SESSION["carrinho"]);
         $this->carrinho();
     }
 
 
+    public function finalizarEncomendaResumo()
+    {
+        if(empty($_SESSION["cliente"])) {
+            Store::redirect("login");
+            return;
+        }
 
+        //dados do carrinho
+
+        $carrinho = [];
+
+        if(!empty($_SESSION["carrinho"])) {
+            foreach ($_SESSION["carrinho"] as $key => $qtd) {
+
+                $produtos = new Produto();
+                $find = $produtos->get_produto_by_id($key);
+
+                if(!empty($find) && $qtd >= 1) {
+                    array_push($carrinho, [
+                        "id_produto" => $find->id_produto,
+                        "nome_produto" => $find->nome_produto,
+                        "preco" => $find->preco,
+                        "imagem" => $find->imagem,
+                        "quantidade" => $_SESSION["carrinho"][$key]
+                    ]);
+                }
+            }
+        }
+
+        //dados do user
+
+
+        //recupera os dados da bd
+        $cliente = new Cliente();
+        $cliente = $cliente->recuperaClienteById($_SESSION["cliente"]);
+
+        $layouts = [
+            "layouts/htmlHeader",
+            "layouts/header",
+            "carrinho_resumo",
+            "layouts/footer",
+            "layouts/htmlFooter",
+        ];
+
+        Store::carregarView($layouts, ["carrinho" => $carrinho, "cliente" => $cliente]);
+    }
+
+
+    public function escolherMetodoPagamento()
+    {
+        echo "Escolher pagamento PHP";
+        var_dump($_SESSION);
+        //$params = json_decode(file_get_contents("php://input"), true);
+        //var_dump($params);
+
+    }
+
+    public function moradaAlternativa() {
+
+        //receber dados via ajax - axios
+        $post = json_decode(file_get_contents("php://input"), true);
+
+        var_dump($post);
+
+        $_SESSION["dados_morada_alternativos"] = [
+            'morada' => $post['moradaAlternativa'],
+            'cidade' => $post['cidadeAlternativa'],
+            'telefone' => $post['telefoneAlternativo']
+        ];
+
+    }
 }

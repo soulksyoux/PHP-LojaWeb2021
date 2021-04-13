@@ -221,9 +221,14 @@ class Auth
             return;
         }
 
-
-        Store::redirect("loja");
         //echo "Login com sucesso!!!";
+        if(isset($_SESSION["tmp_carrinho"]) && $_SESSION["tmp_carrinho"] == true) {
+            unset($_SESSION["tmp_carrinho"]);
+            Store::redirect("finalizar_encomenda_resumo");
+        }else{
+            Store::redirect("loja");
+        }
+
     }
 
     public function logout()

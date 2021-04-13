@@ -114,7 +114,25 @@ class Cliente
         }
 
         $_SESSION["cliente"] = $cliente[0]->id_cliente;
+
         return true;
+    }
+
+    public function recuperaClienteById($id_cliente) {
+        if(empty($_SESSION["cliente"])) {
+            return null;
+        }
+
+        if(empty($id_cliente)) {
+            return null;
+        }
+
+        $params = ["id" => $_SESSION["cliente"]];
+
+        $db = new DataBase();
+        $find = $db->select("SELECT id_cliente, email, nome, morada, cidade, telefone FROM clientes WHERE id_cliente = :id", $params);
+
+        return $find[0];
     }
 
 }

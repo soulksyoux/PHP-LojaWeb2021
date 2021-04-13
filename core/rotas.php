@@ -13,6 +13,10 @@ $rotas = [
     "limpar_carrinho" => "carrinho@limparCarrinho",
     "diminuir_qtd_item" => "carrinho@diminuirQtdItem",
     "aumentar_qtd_item_carrinho" => "carrinho@aumentarQtdItemCarrinho",
+    "finalizar_encomenda" => "carrinho@finalizarEncomenda",
+    "finalizar_encomenda_resumo" => "carrinho@finalizarEncomendaResumo",
+    "metodo_pagamento" => "carrinho@escolherMetodoPagamento",
+    "morada_alternativa" => "carrinho@moradaAlternativa",
 
     "registar_user" => "auth@registarUser",
     "confirmar_email" => "auth@confirmarEmail",
