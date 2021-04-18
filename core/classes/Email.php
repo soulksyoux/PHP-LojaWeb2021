@@ -21,7 +21,7 @@ class Email
      * @param $bod
      * @return bool
      */
-    public function enviar_email_confirmacao_novo_cliente($toEmail, $toName, $subject, $bod): bool
+    public function enviar_email($toEmail, $toName, $subject, $bod): bool
     {
 
         //Import PHPMailer classes into the global namespace

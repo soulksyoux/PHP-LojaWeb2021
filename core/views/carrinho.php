@@ -62,7 +62,7 @@
                     </div>
                     <div class="col text-end">
                         <a href="?a=loja" class="btn btn-primary btn-sm">Continuar a comprar</a>
-                        <a href="?a=finalizar_encomenda" class="btn btn-primary btn-sm">Finalizar encomenda</a>
+                        <a href="?a=preparar_encomenda" onclick="gravar_preco_total_session()" class="btn btn-primary btn-sm">Avançar com encomenda</a>
                     </div>
                 </div>
 

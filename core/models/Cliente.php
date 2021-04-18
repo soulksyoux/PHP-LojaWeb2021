@@ -114,6 +114,8 @@ class Cliente
         }
 
         $_SESSION["cliente"] = $cliente[0]->id_cliente;
+        $_SESSION["cliente_email"] = $cliente[0]->email;
+        $_SESSION["cliente_nome"] = $cliente[0]->nome;
 
         return true;
     }

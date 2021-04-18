@@ -79,4 +79,15 @@ class Store
         return true;
     }
 
+    public static function gerar_codigo_encomenda(): string {
+        $chars = "QWERTYUIOPASDFGHJKLZXCVBNMQWERTYUIOPASDFGHJKLZXCVBNMQWERTYUIOPASDFGHJKLZXCVBNM";
+
+        $codigo = str_shuffle($chars);
+        $codigo = substr($codigo, 0, 2);
+
+        $codigo .= rand(100000, 999999);
+
+        return $codigo;
+    }
+
 }

@@ -9,6 +9,7 @@ class DataBase
      * @var \PDO
      */
     private $ligacao;
+    private $lastId;
 
     // 3 etapas - ligar, comunicar e fechar
 
@@ -28,6 +29,7 @@ class DataBase
 
         // debug
         $this->ligacao->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_WARNING);
+
     }
 
     /**
@@ -115,6 +117,7 @@ class DataBase
             return false;
         }
 
+        $this->lastId = $this->ligacao->lastInsertId();
         $this->desligar();
 
         return $resultado;
@@ -221,4 +224,9 @@ class DataBase
 
         return $executar->rowCount();
     }
+
+    public function getLastId(){
+        return $this->lastId;
+    }
+
 }

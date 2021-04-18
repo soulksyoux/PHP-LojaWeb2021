@@ -155,17 +155,38 @@ function testex() {
 }
 
 function morada_alternativa() {
-    morada = $("#morada_alternativa").val();
-    cidade = $("#cidade_alternativa").val();
-    telefone = $("#telefone_alternativo").val();
+
+
+        morada = $("#morada_alternativa").val();
+        cidade = $("#cidade_alternativa").val();
+        telefone = $("#telefone_alternativo").val();
+
+        axios({
+            method: 'post',
+            url: "?a=morada_alternativa",
+            data: {
+                moradaAlternativa: morada,
+                cidadeAlternativa: cidade,
+                telefoneAlternativo: telefone
+            }
+        }).then((response) => {
+            console.log("ok");
+        }, (error) => {
+            console.log(error);
+        });
+
+}
+
+function gravar_preco_total_session() {
+
+    valorTotal = $("#carrinho_total").html();
+    valorTotal = valorTotal.replace(" $", "");
 
     axios({
         method: 'post',
-        url: "?a=morada_alternativa",
+        url: "?a=valor_total",
         data: {
-            moradaAlternativa: morada,
-            cidadeAlternativa: cidade,
-            telefoneAlternativo: telefone
+            valorTotal: valorTotal,
         }
     }).then((response) => {
         console.log("ok");

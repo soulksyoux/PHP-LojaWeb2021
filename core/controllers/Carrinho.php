@@ -3,8 +3,10 @@
 
 namespace core\controllers;
 
+use core\classes\Email;
 use core\classes\Store;
 use core\models\Cliente;
+use core\models\Encomenda;
 use core\models\Produto;
 
 class Carrinho
@@ -139,7 +141,7 @@ class Carrinho
         header("Location: " . APP_BASE_URL . "?a=carrinho");
     }
 
-    public function finalizarEncomenda()
+    public function prepararEncomenda()
     {
         //validar se utilizador logado
         if(empty($_SESSION["cliente"])) {
@@ -150,7 +152,7 @@ class Carrinho
             return;
         }
 
-        Store::redirect("finalizar_encomenda_resumo");
+        Store::redirect("preparar_encomenda_resumo");
 
     }
 
@@ -160,7 +162,7 @@ class Carrinho
     }
 
 
-    public function finalizarEncomendaResumo()
+    public function prepararEncomendaResumo()
     {
         if(empty($_SESSION["cliente"])) {
             Store::redirect("login");
@@ -196,6 +198,11 @@ class Carrinho
         $cliente = new Cliente();
         $cliente = $cliente->recuperaClienteById($_SESSION["cliente"]);
 
+
+        if(empty($_SESSION["cod_encomenda"])) {
+            $_SESSION["cod_encomenda"] = Store::gerar_codigo_encomenda();
+        }
+
         $layouts = [
             "layouts/htmlHeader",
             "layouts/header",
@@ -208,21 +215,11 @@ class Carrinho
     }
 
 
-    public function escolherMetodoPagamento()
-    {
-        echo "Escolher pagamento PHP";
-        var_dump($_SESSION);
-        //$params = json_decode(file_get_contents("php://input"), true);
-        //var_dump($params);
-
-    }
-
     public function moradaAlternativa() {
 
         //receber dados via ajax - axios
         $post = json_decode(file_get_contents("php://input"), true);
 
-        var_dump($post);
 
         $_SESSION["dados_morada_alternativos"] = [
             'morada' => $post['moradaAlternativa'],
@@ -231,4 +228,99 @@ class Carrinho
         ];
 
     }
+
+    public function valorTotalSession(){
+        //receber dados via ajax - axios
+        $post = json_decode(file_get_contents("php://input"), true);
+
+        $_SESSION["valorTotal"] = $post["valorTotal"];
+    }
+
+
+    public function terminarEncomenda()
+    {
+        //guardar na bd
+
+        $cliente = new Cliente();
+        $cliente = $cliente->recuperaClienteById($_SESSION["cliente"]);
+
+        $dados_encomenda = [
+            "id_cliente" => $cliente->id_cliente,
+            "morada" => !empty($_SESSION["dados_morada_alternativos"]["morada"]) ? $_SESSION["dados_morada_alternativos"]["morada"] : $cliente->morada,
+            "cidade" => !empty($_SESSION["dados_morada_alternativos"]["cidade"]) ? $_SESSION["dados_morada_alternativos"]["cidade"] : $cliente->cidade,
+            "telefone" => !empty($_SESSION["dados_morada_alternativos"]["telefone"]) ? $_SESSION["dados_morada_alternativos"]["telefone"] : $cliente->telefone,
+            "cod_encomenda" => $_SESSION["cod_encomenda"],
+            "status" => "iniciada",
+            "mensagem" => "",
+        ];
+
+        $produtos_carrinho = [];
+
+        if(!empty($_SESSION["carrinho"])) {
+            foreach ($_SESSION["carrinho"] as $key => $qtd) {
+
+                $produtos = new Produto();
+                $find = $produtos->get_produto_by_id($key);
+
+                if(!empty($find) && $qtd >= 1) {
+                    array_push($produtos_carrinho, [
+                        "id_produto" => $find->id_produto,
+                        "nome_produto" => $find->nome_produto,
+                        "preco" => $find->preco,
+                        "imagem" => $find->imagem,
+                        "quantidade" => $_SESSION["carrinho"][$key]
+                    ]);
+                }
+            }
+        }
+
+        $encomenda = new Encomenda();
+        $encomenda->gravar_encomenda($dados_encomenda, $produtos_carrinho);
+
+        die();
+
+        //enviar email para o cliente
+
+        $toEmail = "andytod80@gmail.com";
+        $toName = "AndreGP";
+        $subject = "Email de teste";
+        $body = "<h2>Encomenda confirmnada. Obrigado pela sua preferencia pela " . APP_NAME . "</h2>";
+
+        $email = new Email();
+        $erro = "";
+
+        //$email = $email->enviar_email($toEmail, $toName, $subject, $body);
+
+        $email = 1;
+        if(!$email) {
+            $erro = "Erro no envio do email, tente mais tarde";
+        }
+
+        $dados = [];
+
+        if(!$erro) {
+            $dados["cod_encomenda"] = $_SESSION["cod_encomenda"];
+            $dados["valorTotal"] = $_SESSION["valorTotal"];
+            $dados["dados_morada_alternativos"] = $_SESSION["dados_morada_alternativos"];
+
+            $_SESSION["carrinho"] = [];
+            $_SESSION["dados_morada_alternativos"] = [];
+            $_SESSION["cod_encomenda"] = "";
+            $_SESSION["valorTotal"] = 0;
+        }
+
+
+        $layouts = [
+            "layouts/htmlHeader",
+            "layouts/header",
+            "encomenda_confirmada",
+            "layouts/footer",
+            "layouts/htmlFooter",
+        ];
+
+        Store::carregarView($layouts, ["erro" => $erro, "dados" => $dados]);
+    }
+
+
 }
+

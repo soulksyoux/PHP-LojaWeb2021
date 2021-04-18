@@ -81,7 +81,7 @@ class Auth
 
         $mail = new Email();
 
-        if (!$mail->enviar_email_confirmacao_novo_cliente($toEmail, $toName, $subject, $body)) {
+        if (!$mail->enviar_email($toEmail, $toName, $subject, $body)) {
             $_SESSION["erro"] = "Erro no registo!";
             Store::redirect("novo-cliente");
             return;
@@ -234,6 +234,8 @@ class Auth
     public function logout()
     {
         $_SESSION["cliente"] = null;
+        $_SESSION["cliente_email"] = null;
+        $_SESSION["cliente_nome"] = null;
         Store::redirect("");
     }
 
