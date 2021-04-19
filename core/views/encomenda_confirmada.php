@@ -1,6 +1,3 @@
-<?php if(empty($dados["cod_encomenda"])) { \core\classes\Store::redirect('loja'); }  ?>
-
-
 <div class="container">
 
 

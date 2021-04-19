@@ -54,6 +54,26 @@ class Cliente
         return true;
     }
 
+    public function update_cliente(int $id, array $dados): bool {
+
+        $db = new DataBase();
+
+        $params = [
+            "id_cliente" => $id,
+            "email" => strtolower(trim($dados["text_email"])),
+            "nome" => trim($dados["text_nome_completo"]),
+            "morada" => trim($dados["text_morada"]),
+            "cidade" => trim($dados["text_cidade"]),
+            "telefone" => trim($dados["text_telefone"]),
+        ];
+
+        if (!$db->update("UPDATE clientes SET email = :email, nome = :nome, morada = :morada, cidade = :cidade, telefone = :telefone WHERE id_cliente = :id_cliente" , $params)) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function validar_utilizador_apos_registo($purl): bool{
         $db = new DataBase();
 

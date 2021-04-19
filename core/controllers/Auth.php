@@ -231,6 +231,56 @@ class Auth
 
     }
 
+    public function alterarDadosPessoais()
+    {
+        if(!Store::clienteLogado()) {
+            $this->index();
+            return;
+        }
+
+        $cliente = new Cliente();
+        $cliente = $cliente->recuperaClienteById($_SESSION["cliente"]);
+
+
+        $layouts = [
+            "layouts/htmlHeader",
+            "layouts/header",
+            "alterar_dados_pessoais",
+            "layouts/footer",
+            "layouts/htmlFooter",
+        ];
+
+        Store::carregarView($layouts, ["cliente" => $cliente]);
+    }
+
+    public function gravarDadosPessoais() {
+        //echo "gravar dados pessoais";
+        var_dump($_POST);
+
+        if(empty($_SESSION["cliente"])) {
+            $_SESSION["erro"] = "necessário user logado";
+            Store::redirect("login");
+            return;
+        }
+
+        if(empty($_POST)){
+            $_SESSION["erro"] = "post vazio";
+            Store::redirect("alterar_dados_pessoais");
+            return;
+        }
+
+        if(empty($_POST['text_email']) || empty($_POST['text_nome_completo']) || empty($_POST['text_morada']) || empty($_POST['text_cidade'])){
+            $_SESSION["erro"] = "campos necessários a vazio";
+            Store::redirect("alterar_dados_pessoais");
+            return;
+        }
+
+        $cliente = new Cliente();
+        $cliente = $cliente->update_cliente($_SESSION["cliente"], $_POST);
+
+    }
+
+
     public function logout()
     {
         $_SESSION["cliente"] = null;
@@ -238,5 +288,7 @@ class Auth
         $_SESSION["cliente_nome"] = null;
         Store::redirect("");
     }
+
+
 
 }

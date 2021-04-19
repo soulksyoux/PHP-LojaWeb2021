@@ -169,6 +169,11 @@ class Carrinho
             return;
         }
 
+        if(empty($_SESSION["carrinho"])) {
+            Store::redirect("loja");
+            return;
+        }
+
         //dados do carrinho
 
         $carrinho = [];
@@ -239,6 +244,17 @@ class Carrinho
 
     public function terminarEncomenda()
     {
+        if(empty($_SESSION["cliente"])) {
+            Store::redirect("login");
+            return;
+        }
+
+        if(empty($_SESSION["carrinho"])) {
+            Store::redirect("loja");
+            return;
+        }
+
+
         //guardar na bd
 
         $cliente = new Cliente();
@@ -275,9 +291,13 @@ class Carrinho
         }
 
         $encomenda = new Encomenda();
-        $encomenda->gravar_encomenda($dados_encomenda, $produtos_carrinho);
+        $encomenda = $encomenda->gravar_encomenda($dados_encomenda, $produtos_carrinho);
 
-        die();
+        $erro = "";
+
+        if(!$encomenda) {
+            $erro = "Problema ao processar a encomenda, tente mais tarde!";
+        }
 
         //enviar email para o cliente
 
@@ -287,7 +307,7 @@ class Carrinho
         $body = "<h2>Encomenda confirmnada. Obrigado pela sua preferencia pela " . APP_NAME . "</h2>";
 
         $email = new Email();
-        $erro = "";
+
 
         //$email = $email->enviar_email($toEmail, $toName, $subject, $body);
 
@@ -298,15 +318,15 @@ class Carrinho
 
         $dados = [];
 
-        if(!$erro) {
+        if($erro == "") {
             $dados["cod_encomenda"] = $_SESSION["cod_encomenda"];
             $dados["valorTotal"] = $_SESSION["valorTotal"];
             $dados["dados_morada_alternativos"] = $_SESSION["dados_morada_alternativos"];
 
-            $_SESSION["carrinho"] = [];
-            $_SESSION["dados_morada_alternativos"] = [];
-            $_SESSION["cod_encomenda"] = "";
-            $_SESSION["valorTotal"] = 0;
+            unset($_SESSION["carrinho"]);
+            unset($_SESSION["dados_morada_alternativos"]);
+            unset($_SESSION["cod_encomenda"]);
+            unset($_SESSION["valorTotal"]);
         }
 
 

@@ -6,17 +6,19 @@ use core\classes\DataBase;
 
 class Encomenda
 {
-    public function gravar_encomenda($dados_encomenda, $produtos_carrinho)
+    public function gravar_encomenda($dados_encomenda, $produtos_carrinho): bool
     {
         $db = new DataBase();
-
-        var_dump($dados_encomenda);
 
 
         $encomenda = $db->insert("INSERT INTO 
             encomendas 
             (id_cliente, morada, cidade, telefone, cod_encomenda, status, mensagem) 
             VALUES (:id_cliente, :morada, :cidade, :telefone, :cod_encomenda, :status, :mensagem)", $dados_encomenda);
+
+        if(!$encomenda) {
+            return false;
+        }
 
         $encomenda_lastId = $db->getLastId();
 
@@ -34,10 +36,14 @@ class Encomenda
                         encomenda_produto
                         (id_encomenda, designacao_produto, preco_unitario, quantidade) 
                         VALUES (:id_encomenda, :designacao_produto, :preco_unitario, :quantidade)", $params);
+
+            if(!$encomenda_produto) {
+                return false;
+            }
         }
 
-
-        die();
-
+        return true;
     }
+
+
 }

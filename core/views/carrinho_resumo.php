@@ -1,5 +1,4 @@
 <?php var_dump($_SESSION); ?>
-
 <div class="container-fluid">
     <div style="margin-bottom: 100px; padding: 20px;" class="row">
         <div id="carrinho_container" class="col-12">

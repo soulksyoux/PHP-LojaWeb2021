@@ -7,6 +7,7 @@ $rotas = [
     "loja" => "main@loja",
     "loja" => "main@loja",
     "novo-cliente" => "main@novoCliente",
+    "ver-conta" => "main@verConta",
 
     "carrinho" => "carrinho@carrinho",
     "adicionar_carrinho" => "carrinho@adicionarCarrinho",
@@ -24,6 +25,8 @@ $rotas = [
     "login" => "auth@login",
     "login_user" => "auth@validarLogin",
     "logout" => "auth@logout",
+    "alterar_dados_pessoais" => "auth@alterarDadosPessoais",
+    "gravar_dados_pessoais" => "auth@gravarDadosPessoais",
 ];
 
 //define ação por padrão

@@ -3,6 +3,7 @@
 namespace core\controllers;
 
 use core\classes\Store;
+use core\models\Cliente;
 use core\models\Produto;
 
 
@@ -86,5 +87,19 @@ class Main
             $this->index();
             return;
         }
+    }
+
+    public function verConta()
+    {
+        $layouts = [
+            "layouts/htmlHeader",
+            "layouts/header",
+            "gerir_conta",
+            "layouts/footer",
+            "layouts/htmlFooter",
+        ];
+
+        Store::carregarView($layouts);
+
     }
 }
