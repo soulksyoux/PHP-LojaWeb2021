@@ -254,8 +254,6 @@ class Auth
     }
 
     public function gravarDadosPessoais() {
-        //echo "gravar dados pessoais";
-        var_dump($_POST);
 
         if(empty($_SESSION["cliente"])) {
             $_SESSION["erro"] = "necessário user logado";
@@ -277,6 +275,16 @@ class Auth
 
         $cliente = new Cliente();
         $cliente = $cliente->update_cliente($_SESSION["cliente"], $_POST);
+
+        $layouts = [
+            "layouts/htmlHeader",
+            "layouts/header",
+            "alteracao_dados_sucesso",
+            "layouts/footer",
+            "layouts/htmlFooter",
+        ];
+
+        Store::carregarView($layouts, ["cliente" => $cliente]);
 
     }
 

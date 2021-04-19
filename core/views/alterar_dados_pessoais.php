@@ -1,4 +1,3 @@
-<?php var_dump($_SESSION); ?>
 
 <div class="container-fluid">
     <div class="row my-5">
