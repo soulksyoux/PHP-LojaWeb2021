@@ -234,7 +234,7 @@ class Auth
     public function alterarDadosPessoais()
     {
         if(!Store::clienteLogado()) {
-            $this->index();
+            Store::redirect("login");
             return;
         }
 
@@ -273,8 +273,30 @@ class Auth
             return;
         }
 
-        $cliente = new Cliente();
-        $cliente = $cliente->update_cliente($_SESSION["cliente"], $_POST);
+        $cliente_model = new Cliente();
+        $cliente = $cliente_model->recuperaClienteById($_SESSION["cliente"]);
+
+        if(
+            !empty($cliente) &&
+            $_POST['text_email'] == $cliente->email &&
+            $_POST["text_nome_completo"] == $cliente->nome &&
+            $_POST["text_morada"] == $cliente->morada &&
+            $_POST["text_cidade"] == $cliente->cidade &&
+            $_POST["text_telefone"] == $cliente->telefone) {
+            $_SESSION["erro"] = "não houve alteração de valores";
+            Store::redirect("alterar_dados_pessoais");
+            return;
+        }
+
+        $cliente = $cliente_model->update_cliente($_SESSION["cliente"], $_POST);
+
+        if(!$cliente) {
+            Store::redirect("alterar_dados_pessoais");
+            return;
+        }
+
+        $_SESSION["cliente_nome"] = $_SESSION["cliente_nome"] != $_POST["text_nome_completo"] ? $_POST["text_nome_completo"] : $_SESSION["cliente_nome"];
+        $_SESSION["cliente_email"] = $_SESSION["cliente_email"] != $_POST["text_email"] ? $_POST["text_email"] : $_SESSION["cliente_email"];
 
         $layouts = [
             "layouts/htmlHeader",

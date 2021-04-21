@@ -26,6 +26,20 @@ class Cliente
     }
 
 
+    public function email_alterado_registado($email): bool
+    {
+        $db = new DataBase();
+        $param = ["email" => strtolower(trim($email)), "id_cliente" => $_SESSION["cliente"]];
+        $recuperaCliente = $db->select("SELECT email FROM clientes WHERE email = :email && id_cliente != :id_cliente", $param);
+
+        if (empty($recuperaCliente)) {
+            return false;
+        }
+
+        return true;
+    }
+
+
     /**
      * @param string $purl
      * @return bool
@@ -66,6 +80,20 @@ class Cliente
             "cidade" => trim($dados["text_cidade"]),
             "telefone" => trim($dados["text_telefone"]),
         ];
+
+        if(!filter_var($params["email"], FILTER_VALIDATE_EMAIL)) {
+            $_SESSION["erro"] = "email invalido";
+            return false;
+        }
+
+        //validar se o email a alterar já existe noutra conta da bd
+        if($this->email_alterado_registado($params["email"])) {
+            $_SESSION["erro"] = "email já registado";
+            return false;
+        }
+
+        //validar se existem realmente dados a alterar que sao diferentes do estado original
+
 
         if (!$db->update("UPDATE clientes SET email = :email, nome = :nome, morada = :morada, cidade = :cidade, telefone = :telefone WHERE id_cliente = :id_cliente" , $params)) {
             return false;

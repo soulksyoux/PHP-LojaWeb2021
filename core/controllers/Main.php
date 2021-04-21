@@ -91,6 +91,11 @@ class Main
 
     public function verConta()
     {
+        if(!Store::clienteLogado()) {
+            Store::redirect("login");
+            return;
+        }
+
         $layouts = [
             "layouts/htmlHeader",
             "layouts/header",
