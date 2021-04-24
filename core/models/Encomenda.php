@@ -57,5 +57,16 @@ class Encomenda
         return $encomendas;
     }
 
+    public function obter_encomenda_por_id($id_encomenda): ?array {
+        $params = [
+            "id_encomenda" => $id_encomenda
+        ];
+
+        $db = new DataBase();
+        $encomenda = $db->select("SELECT * FROM encomendas WHERE id_encomenda = :id_encomenda", $params);
+
+        return $encomenda;
+    }
+
 
 }

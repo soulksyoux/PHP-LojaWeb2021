@@ -123,17 +123,8 @@ class Main
 
         //calcular o total para cada encomenda e acrescentar ao array
         if(count($encomendas) > 0) {
-
             foreach ($encomendas as $key => $encomenda) {
-                //obter produtos para a encomenda
-                $total = 0;
-                $produto_model = new Produto();
-                $produtos_encomenda = $produto_model->lista_produtos_de_encomenda($encomenda->id_encomenda);
-
-                foreach ($produtos_encomenda as $produto) {
-                    $total += $produto->preco_unitario * $produto->quantidade;
-                }
-
+                $total = $this->getPrecoTotalEncomenda($encomenda->id_encomenda);
                 $encomendas[$key]->total = $total;
             }
         }
@@ -149,12 +140,61 @@ class Main
         Store::carregarView($layouts, ["encomendas" => $encomendas]);
     }
 
+    private function getPrecoTotalEncomenda(int $id_encomenda): int {
+        $total = 0;
+        $produto_model = new Produto();
+        $produtos_encomenda = $produto_model->lista_produtos_de_encomenda($id_encomenda);
+
+        foreach ($produtos_encomenda as $produto) {
+            $total += $produto->preco_unitario * $produto->quantidade;
+        }
+
+        return $total;
+    }
+
     public function verDetalheEncomenda()
     {
+        if(!Store::clienteLogado() || !Store::valida_user_em_sessao()) {
+            $_SESSION["erro"] = "User tem de estar logado";
+            Store::redirect("login");
+            return;
+        }
+
         $id_encomenda = $a = filter_input(INPUT_GET, 'id_encomenda');
-        var_dump($id_encomenda);
+
+        //obter encomenda
+        $encomenda_model = new Encomenda();
+        $encomenda = $encomenda_model->obter_encomenda_por_id($id_encomenda)[0];
+
+        if(!$encomenda) {
+            $_SESSION["erro"] = "Encomenda não existente no sistema";
+            Store::redirect("inicio");
+            return;
+        }
+
+        //validar se a encomenda pertence ao utilizador logado
+        if($encomenda->id_cliente != $_SESSION["cliente"]) {
+            $_SESSION["erro"] = "Sem permissão de acesso à encomenda, deve se logar com outro user";
+            Store::redirect("inicio");
+            return;
+        }
+
+        $total = $this->getPrecoTotalEncomenda($encomenda->id_encomenda);
+        $encomenda->total = $total;
+
+        $produto_model = new Produto();
+        $produtos_encomenda = $produto_model->lista_produtos_de_encomenda($id_encomenda);
 
         //apresentar detalhe da encomenda XPTO
-        die();
+        $layouts = [
+            "layouts/htmlHeader",
+            "layouts/header",
+            "detalhe_encomenda",
+            "layouts/footer",
+            "layouts/htmlFooter",
+        ];
+
+        Store::carregarView($layouts, ["encomenda" => $encomenda, "produtos_encomenda" => $produtos_encomenda]);
+
     }
 }
