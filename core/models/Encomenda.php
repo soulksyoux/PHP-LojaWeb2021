@@ -45,5 +45,17 @@ class Encomenda
         return true;
     }
 
+    public function obter_encomendas_cliente($id_cliente): ?array {
+
+        $params = [
+            "id_cliente" => $id_cliente
+        ];
+
+        $db = new DataBase();
+        $encomendas = $db->select("SELECT * FROM encomendas WHERE id_cliente = :id_cliente", $params);
+
+        return $encomendas;
+    }
+
 
 }

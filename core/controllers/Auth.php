@@ -313,6 +313,7 @@ class Auth
     public function alterarPassword()
     {
         if(!Store::clienteLogado()) {
+            $_SESSION["erro"] = "necessário user logado";
             Store::redirect("login");
             return;
         }
@@ -330,6 +331,12 @@ class Auth
 
     public function gravarPassword()
     {
+        if(empty($_SESSION["cliente"])) {
+            $_SESSION["erro"] = "necessário user logado";
+            Store::redirect("login");
+            return;
+        }
+
         //validar se o post password 1 e 2 não estão vazios
         if(empty($_POST["text_password_atual"]) || empty($_POST["text_password"]) || empty(($_POST["text_password2"]))) {
             $_SESSION["erro"] = "As passwords tems de estar preenchidas";

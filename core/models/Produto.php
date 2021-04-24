@@ -81,6 +81,18 @@ class Produto
         return true;
     }
 
+    public function lista_produtos_de_encomenda($id_encomenda): ?array {
+
+        $params = [
+            "id_encomenda" => $id_encomenda,
+        ];
+
+        $db = new DataBase();
+        $produtos = $db->select("SELECT * FROM encomenda_produto WHERE id_encomenda = :id_encomenda", $params);
+
+        return $produtos;
+    }
+
 
     
 }

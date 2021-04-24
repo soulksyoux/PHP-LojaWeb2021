@@ -121,6 +121,7 @@ class Cliente
      */
     public function update_password(int $id, string $password): bool
     {
+
         $params = [
             "id_cliente" => $id,
             "password" => $password
