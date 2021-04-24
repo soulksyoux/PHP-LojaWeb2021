@@ -27,6 +27,8 @@ $rotas = [
     "logout" => "auth@logout",
     "alterar_dados_pessoais" => "auth@alterarDadosPessoais",
     "gravar_dados_pessoais" => "auth@gravarDadosPessoais",
+    "alterar_password" => "auth@alterarPassword",
+    "gravar_password" => "auth@gravarPassword",
 ];
 
 //define ação por padrão

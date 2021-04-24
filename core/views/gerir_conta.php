@@ -5,7 +5,7 @@
 
             <div class="d-grid gap-2">
                 <a href="?a=alterar_dados_pessoais" class="btn btn-primary text-center">Alterar dados pessoais</a>
-                <a href="" class="btn btn-primary text-center">Alterar password</a>
+                <a href="?a=alterar_password" class="btn btn-primary text-center">Alterar password</a>
                 <a href="" class="btn btn-primary text-center">Ver todas as encomendas</a>
                 <a href="?a=loja" class="btn btn-primary text-center">Ir para a loja</a>
             </div>

@@ -310,6 +310,87 @@ class Auth
 
     }
 
+    public function alterarPassword()
+    {
+        if(!Store::clienteLogado()) {
+            Store::redirect("login");
+            return;
+        }
+
+        $layouts = [
+            "layouts/htmlHeader",
+            "layouts/header",
+            "alterar_password",
+            "layouts/footer",
+            "layouts/htmlFooter",
+        ];
+
+        Store::carregarView($layouts);
+    }
+
+    public function gravarPassword()
+    {
+        //validar se o post password 1 e 2 não estão vazios
+        if(empty($_POST["text_password_atual"]) || empty($_POST["text_password"]) || empty(($_POST["text_password2"]))) {
+            $_SESSION["erro"] = "As passwords tems de estar preenchidas";
+            Store::redirect("alterar_password");
+            return;
+        }
+
+        //validar se as duas passwords digitadas são iguais
+        if($_POST["text_password"] != $_POST["text_password2"]) {
+            $_SESSION["erro"] = "As passwords tem de ser iguais";
+            Store::redirect("alterar_password");
+            return;
+        }
+
+        //validar se a senha tem mais de 4 caracteres
+        if(mb_strlen($_POST["text_password"]) < 4) {
+            $_SESSION["erro"] = "A senha tem de ter mais de 3 caracteres";
+            Store::redirect("alterar_password");
+            return;
+        }
+
+        //aplicar um hash à password
+        $password = password_hash(trim($_POST["text_password"]),PASSWORD_BCRYPT );
+
+        //validar se a senha atual corresponde
+        $cliente = new Cliente();
+        $cliente_pass = $cliente->validarPassword($_SESSION["cliente"], $_POST["text_password_atual"]);
+        if(!$cliente_pass) {
+            $_SESSION["erro"] = "Senha atual incorreta";
+            Store::redirect("alterar_password");
+            return;
+        }
+
+        //validar se a nova senha é diferente da atual
+        if($_POST["text_password_atual"] == $_POST["text_password"]) {
+            $_SESSION["erro"] = "Senha atual tem de ser diferente da nova!";
+            Store::redirect("alterar_password");
+            return;
+        }
+
+        //guardar a password na bd
+        $cliente = new Cliente();
+        $cliente = $cliente->update_password($_SESSION["cliente"], $password);
+
+        if(!$cliente) {
+            $_SESSION["erro"] = "Erro ao efetuar a operacao";
+            Store::redirect("alterar_password");
+            return;
+        }
+
+        $layouts = [
+            "layouts/htmlHeader",
+            "layouts/header",
+            "alteracao_password_sucesso",
+            "layouts/footer",
+            "layouts/htmlFooter",
+        ];
+
+        Store::carregarView($layouts);
+    }
+
 
     public function logout()
     {

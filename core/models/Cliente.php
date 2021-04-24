@@ -26,6 +26,11 @@ class Cliente
     }
 
 
+    /**
+     * @param $email
+     * @return bool
+     * @throws \Exception
+     */
     public function email_alterado_registado($email): bool
     {
         $db = new DataBase();
@@ -68,6 +73,12 @@ class Cliente
         return true;
     }
 
+    /**
+     * @param int $id
+     * @param array $dados
+     * @return bool
+     * @throws \Exception
+     */
     public function update_cliente(int $id, array $dados): bool {
 
         $db = new DataBase();
@@ -102,6 +113,35 @@ class Cliente
         return true;
     }
 
+    /**
+     * @param int $id
+     * @param string $password
+     * @return bool
+     * @throws \Exception
+     */
+    public function update_password(int $id, string $password): bool
+    {
+        $params = [
+            "id_cliente" => $id,
+            "password" => $password
+        ];
+
+        $db = new DataBase();
+        $db = $db->update("UPDATE clientes SET senha = :password WHERE id_cliente = :id_cliente", $params);
+
+        if(!$db) {
+            return false;
+        }
+
+        return true;
+
+    }
+
+
+    /**
+     * @param $purl
+     * @return bool
+     */
     public function validar_utilizador_apos_registo($purl): bool{
         $db = new DataBase();
 
@@ -139,6 +179,11 @@ class Cliente
     }
 
 
+    /**
+     * @param $dados
+     * @return bool
+     * @throws \Exception
+     */
     public function validar_login($dados)
     {
         $db = new DataBase();
@@ -168,6 +213,11 @@ class Cliente
         return true;
     }
 
+    /**
+     * @param $id_cliente
+     * @return mixed|null
+     * @throws \Exception
+     */
     public function recuperaClienteById($id_cliente) {
         if(empty($_SESSION["cliente"])) {
             return null;
@@ -183,6 +233,33 @@ class Cliente
         $find = $db->select("SELECT id_cliente, email, nome, morada, cidade, telefone FROM clientes WHERE id_cliente = :id", $params);
 
         return $find[0];
+    }
+
+
+    /**
+     * @param int $id_cliente
+     * @param string $password
+     * @return bool
+     * @throws \Exception
+     */
+    public function validarPassword(int $id_cliente, string $password): bool
+    {
+        $params = [
+          "id_cliente" => $id_cliente
+        ];
+
+        $db = new DataBase();
+        $cliente = $db->select("SELECT senha FROM clientes WHERE id_cliente = :id_cliente", $params);
+
+        if(count($cliente) != 1) {
+            return false;
+        }
+
+        if(!password_verify($password, $cliente[0]->senha)) {
+            return false;
+        }
+
+        return true;
     }
 
 }
