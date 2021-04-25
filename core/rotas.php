@@ -31,6 +31,8 @@ $rotas = [
     "gravar_dados_pessoais" => "auth@gravarDadosPessoais",
     "alterar_password" => "auth@alterarPassword",
     "gravar_password" => "auth@gravarPassword",
+
+    "pagamento" => "main@pagamento",
 ];
 
 //define ação por padrão

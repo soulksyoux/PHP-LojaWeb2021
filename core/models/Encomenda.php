@@ -52,7 +52,7 @@ class Encomenda
         ];
 
         $db = new DataBase();
-        $encomendas = $db->select("SELECT * FROM encomendas WHERE id_cliente = :id_cliente", $params);
+        $encomendas = $db->select("SELECT * FROM encomendas WHERE id_cliente = :id_cliente ORDER BY data_encomenda DESC", $params);
 
         return $encomendas;
     }
@@ -66,6 +66,35 @@ class Encomenda
         $encomenda = $db->select("SELECT * FROM encomendas WHERE id_encomenda = :id_encomenda", $params);
 
         return $encomenda;
+    }
+
+    public function obter_encomenda_por_cod($cod_encomenda): ?array {
+        $params = [
+            "cod_encomenda" => $cod_encomenda
+        ];
+
+        $db = new DataBase();
+        $encomenda = $db->select("SELECT * FROM encomendas WHERE cod_encomenda = :cod_encomenda", $params);
+
+        return $encomenda;
+    }
+
+    public function update_estado_encomenda(string $cod_encomenda, string $estado): bool
+    {
+        $params = [
+            "cod_encomenda" => $cod_encomenda,
+            "status" => $estado,
+        ];
+
+        $db = new DataBase();
+        $encomenda = $db->update("UPDATE encomendas SET status = :status WHERE cod_encomenda = :cod_encomenda", $params);
+
+        if(!$encomenda) {
+            return false;
+        }
+
+        return true;
+
     }
 
 

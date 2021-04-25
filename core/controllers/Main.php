@@ -124,7 +124,10 @@ class Main
         //calcular o total para cada encomenda e acrescentar ao array
         if(count($encomendas) > 0) {
             foreach ($encomendas as $key => $encomenda) {
-                $total = $this->getPrecoTotalEncomenda($encomenda->id_encomenda);
+                $produto_model = new Produto();
+                $produtos_encomenda = $produto_model->lista_produtos_de_encomenda($encomenda->id_encomenda);
+
+                $total = $this->getPrecoTotalEncomenda($produtos_encomenda);
                 $encomendas[$key]->total = $total;
             }
         }
@@ -140,10 +143,8 @@ class Main
         Store::carregarView($layouts, ["encomendas" => $encomendas]);
     }
 
-    private function getPrecoTotalEncomenda(int $id_encomenda): int {
+    private function getPrecoTotalEncomenda(array $produtos_encomenda): int {
         $total = 0;
-        $produto_model = new Produto();
-        $produtos_encomenda = $produto_model->lista_produtos_de_encomenda($id_encomenda);
 
         foreach ($produtos_encomenda as $produto) {
             $total += $produto->preco_unitario * $produto->quantidade;
@@ -162,6 +163,14 @@ class Main
 
         $id_encomenda = $a = filter_input(INPUT_GET, 'id_encomenda');
 
+        if(!empty($id_encomenda) && mb_strlen($id_encomenda) != 32) {
+            $_SESSION["erro"] = "Id encomenda invalido";
+            Store::redirect("inicio");
+            return;
+        }
+
+        $id_encomenda = Store::aesDesencriptar($id_encomenda);
+
         //obter encomenda
         $encomenda_model = new Encomenda();
         $encomenda = $encomenda_model->obter_encomenda_por_id($id_encomenda)[0];
@@ -179,11 +188,11 @@ class Main
             return;
         }
 
-        $total = $this->getPrecoTotalEncomenda($encomenda->id_encomenda);
-        $encomenda->total = $total;
-
         $produto_model = new Produto();
         $produtos_encomenda = $produto_model->lista_produtos_de_encomenda($id_encomenda);
+
+        $total = $this->getPrecoTotalEncomenda($produtos_encomenda);
+        $encomenda->total = $total;
 
         //apresentar detalhe da encomenda XPTO
         $layouts = [
@@ -196,5 +205,54 @@ class Main
 
         Store::carregarView($layouts, ["encomenda" => $encomenda, "produtos_encomenda" => $produtos_encomenda]);
 
+    }
+
+    public function pagamento()
+    {
+        //verificar se vem o código da encomenda
+        $cod_encomenda = filter_input(INPUT_GET, 'cod_encomenda');
+
+        if(empty($cod_encomenda)) {
+            $_SESSION["erro"] = "Cod de encomenda esta a vazio";
+            Store::redirect("inicio");
+            return;
+        }
+
+        $cod_encomenda = Store::aesDesencriptar($cod_encomenda);
+
+        //verificar se o estado da encomenda esta pendente
+        $encomenda_model = new Encomenda();
+        $encomenda = $encomenda_model->obter_encomenda_por_cod($cod_encomenda);
+
+        if(empty($encomenda)) {
+            $_SESSION["erro"] = "Encomenda n existe";
+            Store::redirect("inicio");
+            return;
+        }
+
+        if($encomenda[0]->status != "iniciada") {
+            $_SESSION["erro"] = "Status de encomenda invalido";
+            Store::redirect("inicio");
+            return;
+        }
+
+        //alterar estado da encomenda de pendente para em processamento
+        $encomenda_nova = $encomenda_model->update_estado_encomenda($cod_encomenda, "processamento");
+
+        if(!$encomenda_nova) {
+            $_SESSION["erro"] = "Problema ao processar o pagamento da encomenda";
+            Store::redirect("inicio");
+            return;
+        }
+
+        $layouts = [
+            "layouts/htmlHeader",
+            "layouts/header",
+            "pagamento_encomenda_sucesso",
+            "layouts/footer",
+            "layouts/htmlFooter",
+        ];
+
+        Store::carregarView($layouts);
     }
 }

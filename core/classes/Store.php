@@ -37,6 +37,14 @@ class Store
     }
 
     /**
+     * @return bool
+     */
+    public static function adminLogado(): bool
+    {
+        return isset($_SESSION["admin"]);
+    }
+
+    /**
      * @param int $numCaracteres
      * @return string
      */
@@ -52,13 +60,17 @@ class Store
 
     /**
      * @param string $rota
+     * @param bool $admin
      */
-    public static function redirect(string $rota = ""): void
+    public static function redirect(string $rota = "", bool $admin = false): void
     {
         $rota = empty($rota) ? "" : "?a=$rota";
-        header("Location: " . APP_BASE_URL . $rota);
+        if(!$admin) {
+            header("Location: " . APP_BASE_URL . $rota);
+        }else{
+            header("Location: " . APP_BASE_URL . "admin/" . $rota);
+        }
     }
-
 
     /**
      * @return bool
@@ -66,20 +78,25 @@ class Store
      */
     public static function valida_user_em_sessao(): bool
     {
-        if(!self::clienteLogado()) {
+        if (!self::clienteLogado()) {
             return false;
         }
 
         $db = new DataBase();
-        $cliente = $db->select("SELECT id_cliente FROM clientes WHERE id_cliente = :id_cliente", ["id_cliente" => $_SESSION["cliente"]]);
-        if(count($cliente) != 1) {
+        $cliente = $db->select("SELECT id_cliente FROM clientes WHERE id_cliente = :id_cliente",
+            ["id_cliente" => $_SESSION["cliente"]]);
+        if (count($cliente) != 1) {
             return false;
         }
 
         return true;
     }
 
-    public static function gerar_codigo_encomenda(): string {
+    /**
+     * @return string
+     */
+    public static function gerar_codigo_encomenda(): string
+    {
         $chars = "QWERTYUIOPASDFGHJKLZXCVBNMQWERTYUIOPASDFGHJKLZXCVBNMQWERTYUIOPASDFGHJKLZXCVBNM";
 
         $codigo = str_shuffle($chars);
@@ -88,6 +105,26 @@ class Store
         $codigo .= rand(100000, 999999);
 
         return $codigo;
+    }
+
+    /**
+     * @param $valor
+     * @return string
+     */
+    public static function aesEncriptar($valor): string
+    {
+        $valor_encriptado = bin2hex(openssl_encrypt($valor, "aes-256-cbc", APP_AES_KEY, OPENSSL_RAW_DATA, APP_AES_IV));
+        return $valor_encriptado;
+    }
+
+    /**
+     * @param $valor
+     * @return string
+     */
+    public static function aesDesencriptar($valor): string
+    {
+        $valor_desencriptado = openssl_decrypt(hex2bin($valor), "aes-256-cbc", APP_AES_KEY, OPENSSL_RAW_DATA, APP_AES_IV);
+        return $valor_desencriptado;
     }
 
 }

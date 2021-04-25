@@ -6,14 +6,14 @@
             <?php if($encomendas == []): ?>
                 <h5>Ainda sem encomendas...</h5>
             <?php else: ?>
-                <table class="table">
-                    <thead>
+                <table class="table table-striped table-hover">
+                    <thead class="table-warning">
                     <tr>
                         <th>Código</th>
                         <th>Data</th>
                         <th>Status</th>
                         <th>Total</th>
-                        <th>Ações</th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -23,11 +23,12 @@
                                 <td><?= $encomenda->data_encomenda; ?></td>
                                 <td><?= $encomenda->status; ?></td>
                                 <td><?= number_format($encomenda->total, "2", ",",  ".") , "$"?></td>
-                                <td><a href="?a=ver_detalhe_encomenda&id_encomenda=<?= $encomenda->id_encomenda; ?>">Ver detalhe</a></td>
+                                <td><a href="?a=ver_detalhe_encomenda&id_encomenda=<?= \core\classes\Store::aesEncriptar($encomenda->id_encomenda); ?>">Ver detalhe</a></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
+                <div class="text-end text-secondary">Total de encomendas: <strong><?= count($encomendas); ?></strong></div>
             <?php endif; ?>
 
 

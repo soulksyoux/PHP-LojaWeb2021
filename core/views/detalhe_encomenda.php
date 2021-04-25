@@ -19,15 +19,18 @@
             <div class="col-sm-8 offset-sm-2">
                 <h4>Lista de produtos:</h4>
 
-                <table class="table">
-                    <thead>
+                <?php if($produtos_encomenda == []): ?>
+                    <p>Lista de produtos vazia...</p>
+                <?php else: ?>
+                    <table class="table">
+                        <thead>
                         <tr>
                             <th>Designação</th>
                             <th>Quantidade</th>
                             <th>Preço unitário</th>
                         </tr>
-                    </thead>
-                    <tbody>
+                        </thead>
+                        <tbody>
                         <?php foreach ($produtos_encomenda as $produto): ?>
                             <tr>
                                 <td><?= $produto->designacao_produto; ?></td>
@@ -35,11 +38,15 @@
                                 <td><?= number_format($produto->preco_unitario, "2", ",", ".") . "$";?></td>
                             </tr>
                         <?php endforeach; ?>
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                <?php endif; ?>
+
+
             </div>
-            <div class="col-sm-4 offset-sm-4 my-5">
+            <div class="col-sm-6 offset-sm-3 my-5">
                 <div class="text-center">
+                    <a href="?a=pagamento&cod_encomenda=<?= \core\classes\Store::aesEncriptar($encomenda->cod_encomenda); ?>" class="btn btn-primary">Efetuar pagamento</a>
                     <a href="?a=ver_encomendas" class="btn btn-primary">Voltar para encomendas</a>
                 </div>
             </div>
