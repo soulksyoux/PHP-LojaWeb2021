@@ -100,20 +100,13 @@ class Admin
         $_SESSION["admin_id"] = $admin->id_administrador;
         $_SESSION["admin_user"] = $admin->utilizador;
 
-        $layouts = [
-            "admin/layouts/htmlHeader",
-            "admin/layouts/header",
-            "admin/home",
-            "admin/layouts/footer",
-            "admin/layouts/htmlFooter",
-        ];
-
-        Store::carregarView($layouts);
+        Store::redirect("inicio", true);
     }
 
     public function logoutAdmin()
     {
-        unset($_SESSION["admin"]);
+        unset($_SESSION["admin_id"]);
+        unset($_SESSION["admin_user"]);
         Store::redirect("admin-login", true);
     }
 

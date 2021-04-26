@@ -41,7 +41,7 @@ class Store
      */
     public static function adminLogado(): bool
     {
-        return isset($_SESSION["admin"]);
+        return isset($_SESSION["admin_id"]);
     }
 
     /**
