@@ -19,6 +19,9 @@
         </div>
         <div class="col-6 text-end p-3">
             <a class="navbar-loja-links" href="?a=inicio">Inicio</a>
+            <?php if(!empty($_SESSION["admin_id"])): ?>
+                <a class="navbar-loja-links" href="?a=logout-admin">Logout</a>
+            <?php endif; ?>
         </div>
     </div>
 </div>

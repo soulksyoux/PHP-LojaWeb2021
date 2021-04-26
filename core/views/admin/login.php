@@ -3,19 +3,19 @@
         <div class="col-6 offset-3">
             <h3 class="text-center"><?= "Backoffice Login"; ?></h3>
 
-            <form action="?a=login_user" method="post">
+            <form action="?a=submeter_login_admin" method="post">
 
                 <!-- Email -->
                 <div class="my-3">
-                    <label for="text_email">Email</label>
-                    <input type="email" name="text_email" id="text_email" placeholder="Email" class="form-control" required>
+                    <label for="text_email">Admin Email</label>
+                    <input type="email" name="text_email_admin" id="text_email_admin" placeholder="Email Admin" class="form-control" required>
                 </div>
 
 
                 <!-- Senha1 -->
                 <div class="my-3">
                     <label for="text_senha_1">Senha</label>
-                    <input type="password" name="text_senha_1" id="text_senha_1" placeholder="Senha" class="form-control" required>
+                    <input type="password" name="text_senha" id="text_senha" placeholder="Senha" class="form-control" required>
                 </div>
 
 

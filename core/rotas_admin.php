@@ -5,7 +5,9 @@
 $rotas = [
     "inicio" => "admin@index",
     "admin-login" => "admin@adminLogin",
+    "submeter_login_admin" => "admin@submeterLoginAdmin",
     "lista-clientes" => "admin@listaClientes",
+    "logout-admin" => "admin@logoutAdmin",
 ];
 
 //define ação por padrão
