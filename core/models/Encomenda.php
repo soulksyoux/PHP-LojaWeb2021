@@ -97,5 +97,23 @@ class Encomenda
 
     }
 
+    public function obter_encomendas_por_estado(string $estado): ?array
+    {
+        $params = [
+            "status" => $estado
+        ];
+
+        $db = new DataBase();
+        $encomendas = $db->select("SELECT * FROM encomendas WHERE status = :status", $params);
+
+
+        if(count($encomendas) <= 0) {
+            return null;
+        }
+
+        return $encomendas;
+
+    }
+
 
 }

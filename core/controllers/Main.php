@@ -230,7 +230,7 @@ class Main
             return;
         }
 
-        if($encomenda[0]->status != "iniciada") {
+        if($encomenda[0]->status != "pendente") {
             $_SESSION["erro"] = "Status de encomenda invalido";
             Store::redirect("inicio");
             return;

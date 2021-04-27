@@ -266,7 +266,7 @@ class Carrinho
             "cidade" => !empty($_SESSION["dados_morada_alternativos"]["cidade"]) ? $_SESSION["dados_morada_alternativos"]["cidade"] : $cliente->cidade,
             "telefone" => !empty($_SESSION["dados_morada_alternativos"]["telefone"]) ? $_SESSION["dados_morada_alternativos"]["telefone"] : $cliente->telefone,
             "cod_encomenda" => $_SESSION["cod_encomenda"],
-            "status" => "iniciada",
+            "status" => "pendente",
             "mensagem" => "",
         ];
 

@@ -4,6 +4,7 @@
 namespace core\controllers;
 use core\classes\Store;
 use core\models\Administrador;
+use core\models\Encomenda;
 
 class Admin
 {
@@ -14,6 +15,12 @@ class Admin
             Store::redirect("admin-login", true);
             return;
         }
+
+        //obter encomendas com estado pendente
+        $encomenda_model = new Encomenda();
+        $encomendas = $encomenda_model->obter_encomendas_por_estado("pendente");
+
+        //var_dump($encomendas);
 
         $layouts = [
             "admin/layouts/htmlHeader",
@@ -28,11 +35,11 @@ class Admin
 
     public function adminLogin()
     {
-
         if(Store::adminLogado()) {
             Store::redirect("inicio", true);
             return;
         }
+
 
         $layouts = [
             "admin/layouts/htmlHeader",
