@@ -196,6 +196,8 @@ function gravar_preco_total_session() {
 
 }
 
-
+$(document).ready( function () {
+    $('#tabela-encomendas').DataTable();
+} );
 
 

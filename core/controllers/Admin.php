@@ -19,8 +19,13 @@ class Admin
         //obter encomendas com estado pendente
         $encomenda_model = new Encomenda();
         $encomendas = $encomenda_model->obter_encomendas_por_estado("pendente");
+        $total_encomendas_pendentes = $encomenda_model->total_encomendas_por_estado("pendente");
+        $total_encomendas_processamento = $encomenda_model->total_encomendas_por_estado("processamento");
 
-        //var_dump($encomendas);
+        $data = [
+            "total_encomendas_pendentes" => $total_encomendas_pendentes,
+            "total_encomendas_processamento" => $total_encomendas_processamento,
+        ];
 
         $layouts = [
             "admin/layouts/htmlHeader",
@@ -30,7 +35,7 @@ class Admin
             "admin/layouts/htmlFooter",
         ];
 
-        Store::carregarView($layouts);
+        Store::carregarView($layouts, $data);
     }
 
     public function adminLogin()
@@ -119,5 +124,36 @@ class Admin
 
     public function listaClientes() {
         echo "Lista de clientes";
+    }
+
+    public function listaEncomendas() {
+        $entradas_filtro = ["pendente" , "processamento", "cancelada", "enviada", "concluida"];
+
+        $filtro = "";
+
+        if(!empty($_GET["f"])) {
+            if(in_array($_GET["f"], $entradas_filtro)) {
+                $filtro = $_GET["f"];
+            }
+        }
+
+        //obter encomendas da base de dados baseadas no filtro
+        $encomenda_model = new Encomenda();
+        $encomendas = $encomenda_model->obter_encomendas_por_estado($filtro);
+
+        $dados = [
+            "encomendas" => $encomendas,
+            "filtro" => $filtro,
+        ];
+
+        $layouts = [
+            "admin/layouts/htmlHeader",
+            "admin/layouts/header",
+            "admin/encomendas",
+            "admin/layouts/footer",
+            "admin/layouts/htmlFooter",
+        ];
+
+        Store::carregarView($layouts, $dados);
     }
 }

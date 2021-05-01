@@ -99,12 +99,19 @@ class Encomenda
 
     public function obter_encomendas_por_estado(string $estado): ?array
     {
+        $db = new DataBase();
+
         $params = [
             "status" => $estado
         ];
 
-        $db = new DataBase();
-        $encomendas = $db->select("SELECT * FROM encomendas WHERE status = :status", $params);
+        if(empty($estado)) {
+            $encomendas = $db->select("SELECT encomendas.*, clientes.nome, clientes.email FROM encomendas LEFT JOIN clientes ON encomendas.id_cliente = clientes.id_cliente ORDER BY data_encomenda DESC");
+        }else{
+            $encomendas = $db->select("SELECT encomendas.*, clientes.nome, clientes.email FROM encomendas LEFT JOIN clientes ON encomendas.id_cliente = clientes.id_cliente WHERE status = :status ORDER BY data_encomenda DESC", $params);
+        }
+
+
 
 
         if(count($encomendas) <= 0) {
@@ -113,6 +120,18 @@ class Encomenda
 
         return $encomendas;
 
+    }
+
+    public function total_encomendas_por_estado(string $estado): int {
+        $params = [
+            "status" => $estado
+        ];
+
+        $db = new DataBase();
+        $total = $db->select("SELECT COUNT(id_encomenda) AS total FROM encomendas WHERE status = :status", $params);
+
+
+        return $total[0]->total;
     }
 
 

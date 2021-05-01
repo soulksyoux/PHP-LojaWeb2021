@@ -8,6 +8,9 @@ $rotas = [
     "submeter_login_admin" => "admin@submeterLoginAdmin",
     "lista-clientes" => "admin@listaClientes",
     "logout-admin" => "admin@logoutAdmin",
+
+    //encomendas
+    "lista-encomendas" => "admin@listaEncomendas",
 ];
 
 //define ação por padrão
