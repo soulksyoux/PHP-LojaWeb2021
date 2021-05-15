@@ -13,6 +13,7 @@ $rotas = [
     "lista-encomendas" => "admin@listaEncomendas",
     "filtrar-status" => "admin@filtrarStatus",
     "ver-encomendas-cliente" => "admin@verEncomendasCliente",
+    "detalhe_encomenda" => "admin@detalheEncomenda",
 
     //clientes
     "lista-clientes" => "admin@listaClientes",

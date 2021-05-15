@@ -1,9 +1,10 @@
 <div class="container-fluid">
     <div class="row my-5">
+        <div class="col-md-3"><?php include(__DIR__ . "/layouts/side-menu-admin.php"); ?></div>
         <?php if($cliente == []): ?>
             <h5>Cliente nulo</h5>
         <?php else: ?>
-            <div class="col-sm-4 offset-sm-4 mb-5">
+            <div class="col-sm-6 my-5">
                 <h3 class="text-center mb-4"><?= "Detalhe do cliente ID: " . $cliente->id_cliente; ?></h3>
                 <div class="border p-3">
                     <div><strong>Nome: </strong><?= $cliente->nome; ?></div>
@@ -22,7 +23,7 @@
             <div class="text-muted text-center m-0">Cliente ainda sem encomendas</div>
             <?php endif; ?>
 
-            <div class="col-sm-6 offset-sm-3 my-5">
+            <div class="row my-5">
                 <div class="text-center">
                     <?php if(!empty($encomendas_cliente)): ?>
                         <a href="?a=ver-encomendas-cliente&id=<?= \core\classes\Store::aesEncriptar($cliente->id_cliente) ?>" class="btn btn-primary">Ver encomendas</a>
@@ -30,6 +31,7 @@
                     <a href="?a=lista-clientes" class="btn btn-primary">Voltar para clientes</a>
                 </div>
             </div>
+
         <?php endif; ?>
 
         <?php if(!empty($_SESSION["erro"])): ?>

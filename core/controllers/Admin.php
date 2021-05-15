@@ -279,4 +279,36 @@ class Admin
         Store::carregarView($layouts, $dados);
 
     }
+
+    public function detalheEncomenda()
+    {
+        if(!Store::adminLogado()) {
+            Store::redirect("login", true);
+            return;
+        }
+
+        if(empty($_GET["k"])) {
+            Store::redirect("inicio", true);
+            return;
+        }
+
+        if(strlen($_GET["k"]) != 32) {
+            Store::redirect("inicio", true);
+            return;
+        }
+
+        $id_encomenda = Store::aesDesencriptar($_GET["k"]);
+
+        $id_encomenda_model = new Encomenda();
+        $encomenda = $id_encomenda_model->obter_encomenda_por_id($id_encomenda);
+
+        if(empty($encomenda)) {
+            Store::redirect("inicio", true);
+            return;
+        }
+
+        var_dump($encomenda);
+        die();
+
+    }
 }
