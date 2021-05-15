@@ -5,6 +5,29 @@
 
             <h3>Lista de encomendas<?= (!empty($filtro)) ? " - " . ucfirst($filtro) : "";  ?>:</h3>
 
+            <hr>
+
+
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <a href="?a=lista-encomendas" class="btn btn-primary btn-sm">Ver todas encomendas</a>
+                    </div>
+                        <div class="d-inline-flex">
+                            <small class="w-100 me-2">Escolher o estado:</small>
+                            <select onchange="filtrarStatus()" class="form-select form-select-sm" aria-label="Default select example" id="combo-status">
+                                <option <?= (empty($filtro)) ? "selected" : "" ?>></option>
+                                <option <?= ($filtro == 'pendente') ? "selected" : "" ?> value="pendente">Pendente</option>
+                                <option <?= ($filtro == 'processamento') ? "selected" : "" ?> value="processamento">Em processamento</option>
+                                <option <?= ($filtro == 'enviada') ? "selected" : "" ?> value="enviada">Enviada</option>
+                                <option <?= ($filtro == 'cancelada') ? "selected" : "" ?> value="cancelada">Cancelada</option>
+                                <option <?= ($filtro == 'finalizada') ? "selected" : "" ?> value="finalizada">Finalizado</option>
+                            </select>
+                        </div>
+
+                </div>
+
+            <hr>
+
             <?php if(!empty($encomendas)): ?>
                 <p id="teste">Apresenta as encomendas</p>
                 <small>

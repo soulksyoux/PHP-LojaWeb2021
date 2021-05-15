@@ -11,6 +11,12 @@ $rotas = [
 
     //encomendas
     "lista-encomendas" => "admin@listaEncomendas",
+    "filtrar-status" => "admin@filtrarStatus",
+    "ver-encomendas-cliente" => "admin@verEncomendasCliente",
+
+    //clientes
+    "lista-clientes" => "admin@listaClientes",
+    "detalhe-cliente" => "admin@detalheCliente",
 ];
 
 //define ação por padrão

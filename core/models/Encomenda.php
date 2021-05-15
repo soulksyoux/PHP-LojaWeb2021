@@ -134,5 +134,17 @@ class Encomenda
         return $total[0]->total;
     }
 
+    public function total_encomendas_por_cliente($id_cliente): int {
+        $params = [
+            "id_cliente" => $id_cliente
+        ];
+
+        $db = new DataBase();
+        $total = $db->select("SELECT COUNT(id_encomenda) AS total FROM encomendas WHERE id_cliente = :id_cliente", $params);
+
+
+        return $total[0]->total;
+    }
+
 
 }

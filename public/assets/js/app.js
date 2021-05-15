@@ -197,7 +197,57 @@ function gravar_preco_total_session() {
 }
 
 $(document).ready( function () {
-    $('#tabela-encomendas').DataTable();
+    $('#tabela-encomendas').DataTable({
+        "language": {
+            "lengthMenu": "Mostrar _MENU_ registos por página",
+            "zeroRecords": "Nenhum registo encontrado",
+            "info": "Mostrar página _PAGE_ de _PAGES_",
+            "infoEmpty": "Sem registos disponiveis",
+            "infoFiltered": "(filtro aplicado de _MAX_ registos totais)",
+            "paginate": {
+                "first":      "Primeira",
+                "last":       "Ultima",
+                "next":       "Seguinte",
+                "previous":   "Anterior"
+            },
+            "loadingRecords": "Carregando...",
+            "processing":     "Processando...",
+            "search":         "Pesquisa:",
+        }
+    } );
+
 } );
+
+$(document).ready( function () {
+    $('#tabela-clientes').DataTable({
+        "language": {
+            "lengthMenu": "Mostrar _MENU_ registos por página",
+            "zeroRecords": "Nenhum registo encontrado",
+            "info": "Mostrar página _PAGE_ de _PAGES_",
+            "infoEmpty": "Sem registos disponiveis",
+            "infoFiltered": "(filtro aplicado de _MAX_ registos totais)",
+            "paginate": {
+                "first":      "Primeira",
+                "last":       "Ultima",
+                "next":       "Seguinte",
+                "previous":   "Anterior"
+            },
+            "loadingRecords": "Carregando...",
+            "processing":     "Processando...",
+            "search":         "Pesquisa:",
+        }
+    } );
+
+} );
+
+
+const filtrarStatus = async () => {
+    val = $("#combo-status").val();
+    console.log(val);
+
+    window.location.href = '?a=lista-encomendas&f=' + val;
+}
+
+
 
 

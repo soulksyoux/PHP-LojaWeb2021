@@ -214,13 +214,36 @@ class Cliente
         return true;
     }
 
+
+    /**
+     * @return array|null
+     * @throws \Exception
+     */
+    public function recuperarClientes(): ?array
+    {
+        if(!Store::adminLogado()) {
+            return null;
+        }
+
+        $db = new DataBase();
+        $find = $db->select("
+            SELECT c.id_cliente, c.email, c.nome, c.telefone, c.ativo, c.deleted_at, COUNT(e.id_encomenda) total_encomendas
+            FROM clientes as c 
+            LEFT JOIN encomendas as e ON c.id_cliente = e.id_cliente
+            GROUP BY c.id_cliente
+        ");
+
+        return $find;
+    }
+
     /**
      * @param $id_cliente
      * @return mixed|null
      * @throws \Exception
      */
     public function recuperaClienteById($id_cliente) {
-        if(empty($_SESSION["cliente"])) {
+
+        if(empty($_SESSION["cliente"]) && !Store::adminLogado()) {
             return null;
         }
 
@@ -228,10 +251,10 @@ class Cliente
             return null;
         }
 
-        $params = ["id" => $_SESSION["cliente"]];
+        $params = ["id" => $id_cliente];
 
         $db = new DataBase();
-        $find = $db->select("SELECT id_cliente, email, nome, morada, cidade, telefone FROM clientes WHERE id_cliente = :id", $params);
+        $find = $db->select("SELECT * FROM clientes WHERE id_cliente = :id", $params);
 
         return $find[0];
     }

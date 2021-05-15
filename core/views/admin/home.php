@@ -6,7 +6,7 @@
             <h3>Encomendas Pendentes:</h3>
             <?php if($total_encomendas_pendentes > 0): ?>
                 <div class="alert alert-info" role="alert">
-                    <span class="me-2">Existem encomendas pendentes: <?= $total_encomendas_pendentes ?></span><span><a href="?a=lista-encomendas&f=pendentes">Ver</a></span>
+                    <span class="me-2">Existem encomendas pendentes: <?= $total_encomendas_pendentes ?></span><span><a href="?a=lista-encomendas&f=pendente">Ver</a></span>
                 </div>
             <?php else: ?>
                 <div class="alert alert-danger" role="alert">
