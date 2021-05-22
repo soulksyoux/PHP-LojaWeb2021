@@ -6,6 +6,7 @@ use core\classes\Store;
 use core\models\Administrador;
 use core\models\Cliente;
 use core\models\Encomenda;
+use core\models\Produto;
 
 class Admin
 {
@@ -300,15 +301,102 @@ class Admin
         $id_encomenda = Store::aesDesencriptar($_GET["k"]);
 
         $id_encomenda_model = new Encomenda();
-        $encomenda = $id_encomenda_model->obter_encomenda_por_id($id_encomenda);
+        $encomenda = $id_encomenda_model->obter_encomenda_por_id($id_encomenda)[0];
 
         if(empty($encomenda)) {
             Store::redirect("inicio", true);
             return;
         }
 
-        var_dump($encomenda);
-        die();
+        $produto_model = new Produto();
+        $lista_produtos_encomenda = $produto_model->lista_produtos_de_encomenda($id_encomenda);
+
+
+        if(empty($lista_produtos_encomenda)) {
+            Store::redirect("inicio", true);
+            return;
+        }
+
+
+        $dados = [
+            "encomenda" => $encomenda,
+            "lista_produtos_encomenda" => $lista_produtos_encomenda,
+        ];
+
+        $layouts = [
+            "admin/layouts/htmlHeader",
+            "admin/layouts/header",
+            "admin/detalhe_encomenda",
+            "admin/layouts/footer",
+            "admin/layouts/htmlFooter",
+        ];
+
+        Store::carregarView($layouts, $dados);
+
+    }
+
+    public function alterarEstadoEncomenda()
+    {
+        if(!Store::adminLogado()) {
+            Store::redirect("login", true);
+            return;
+        }
+
+        if(empty($_GET["i"])) {
+            Store::redirect("inicio", true);
+            return;
+        }
+
+        if(strlen($_GET["i"]) != 32) {
+            Store::redirect("inicio", true);
+            return;
+        }
+
+        if(empty($_GET["e"])) {
+            Store::redirect("inicio", true);
+            return;
+        }
+
+        if(!in_array($_GET["e"], STATUS)) {
+            Store::redirect("inicio", true);
+            return;
+        }
+
+        $cod_encomenda = Store::aesDesencriptar($_GET["i"]);
+        $estado = mb_strtolower($_GET["e"]);
+
+        $encomenda_model = new Encomenda();
+        $encomenda_model->update_estado_encomenda($cod_encomenda, $estado);
+
+        $encomenda = $encomenda_model->obter_encomenda_por_cod($cod_encomenda)[0];
+
+        if(empty($encomenda)) {
+            Store::redirect("inicio", true);
+            return;
+        }
+
+        $produto_model = new Produto();
+        $lista_produtos_encomenda = $produto_model->lista_produtos_de_encomenda($encomenda->id_encomenda);
+
+        if(empty($lista_produtos_encomenda)) {
+            Store::redirect("inicio", true);
+            return;
+        }
+
+        $dados = [
+            "encomenda" => $encomenda,
+            "lista_produtos_encomenda" => $lista_produtos_encomenda,
+        ];
+
+        $layouts = [
+            "admin/layouts/htmlHeader",
+            "admin/layouts/header",
+            "admin/detalhe_encomenda",
+            "admin/layouts/footer",
+            "admin/layouts/htmlFooter",
+        ];
+
+        Store::carregarView($layouts, $dados);
 
     }
 }

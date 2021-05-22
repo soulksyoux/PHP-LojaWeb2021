@@ -14,6 +14,7 @@ $rotas = [
     "filtrar-status" => "admin@filtrarStatus",
     "ver-encomendas-cliente" => "admin@verEncomendasCliente",
     "detalhe_encomenda" => "admin@detalheEncomenda",
+    "alterar_estado_encomenda" => "admin@alterarEstadoEncomenda",
 
     //clientes
     "lista-clientes" => "admin@listaClientes",

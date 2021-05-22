@@ -32,7 +32,7 @@
                                     <td><?= $encomenda->cidade; ?></td>
                                     <td><?= $encomenda->telefone; ?></td>
                                     <td><?= $encomenda->mensagem; ?></td>
-                                    <td><?= $encomenda->status; ?></td>
+                                    <td><a class="text-decoration-none" href="?a=detalhe_encomenda&k=<?= \core\classes\Store::aesEncriptar($encomenda->id_encomenda)?>"><?= $encomenda->status; ?></a></td>
                                     <td><?= $encomenda->created_at; ?></td>
                                     <td><?= $encomenda->updated_at; ?></td>
                                 </tr>

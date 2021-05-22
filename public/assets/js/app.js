@@ -240,6 +240,30 @@ $(document).ready( function () {
 
 } );
 
+$(document).ready( function () {
+    $('#table_encomenda_produtos').DataTable({
+        "language": {
+            "lengthMenu": "Mostrar _MENU_ registos por página",
+            "zeroRecords": "Nenhum registo encontrado",
+            "info": "Mostrar página _PAGE_ de _PAGES_",
+            "infoEmpty": "Sem registos disponiveis",
+            "infoFiltered": "(filtro aplicado de _MAX_ registos totais)",
+            "paginate": {
+                "first":      "Primeira",
+                "last":       "Ultima",
+                "next":       "Seguinte",
+                "previous":   "Anterior"
+            },
+            "loadingRecords": "Carregando...",
+            "processing":     "Processando...",
+            "search":         "Pesquisa:",
+        }
+    } );
+
+} );
+
+
+
 
 const filtrarStatus = async () => {
     val = $("#combo-status").val();
