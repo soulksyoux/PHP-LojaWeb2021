@@ -383,6 +383,32 @@ class Admin
             return;
         }
 
+
+        //regras quando muda estado
+        switch ($estado) {
+            case "pendente":
+                echo "pendente lol";
+                break;
+            case "processamento":
+                echo "processamento lol";
+                break;
+            case "cancelada":
+                echo "cancelada lol";
+                break;
+            case "enviada":
+                //enviar email com notificacao
+                $this->enviar_email_encomenda_enviada($encomenda->id_encomenda);
+                echo "enviada lol";
+                break;
+            case "concluida":
+                echo "concluida lol";
+                break;
+            default:
+                break;
+        }
+
+
+
         $dados = [
             "encomenda" => $encomenda,
             "lista_produtos_encomenda" => $lista_produtos_encomenda,
@@ -398,5 +424,16 @@ class Admin
 
         Store::carregarView($layouts, $dados);
 
+    }
+
+
+
+    /**
+     * Funcoes privadas para lidar com a mudanca de estado
+     */
+
+    private function enviar_email_encomenda_enviada($id_encomenda)
+    {
+        echo "Email enviado!";
     }
 }
