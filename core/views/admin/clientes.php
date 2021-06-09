@@ -29,7 +29,7 @@
                                 <td><a class="text-decoration-none" href="?a=detalhe-cliente&i=<?= $cliente->id_cliente; ?>"><?= $cliente->nome; ?></a></td>
                                 <td><?= $cliente->email; ?></td>
                                 <td><?= $cliente->telefone; ?></td>
-                                <td class="text-center"><?= ($cliente->total_encomendas > 0) ? $cliente->total_encomendas : "-" ?></td>
+                                <td class="text-center"><?= ($cliente->total_encomendas > 0) ? ("<a href='?a=lista-encomendas&id=" . \core\classes\Store::aesEncriptar($cliente->id_cliente) . "' class='text-decoration-none'>" . $cliente->total_encomendas . "</a>") : "-" ?></td>
                                 <td class="text-center"><?= ($cliente->ativo == 1) ? "<i class='fas fa-check text-success'></i>" : "<i class='fas fa-times text-danger'></i>" ?></td>
                                 <td><?= $cliente->deleted_at; ?></td>
                             </tr>

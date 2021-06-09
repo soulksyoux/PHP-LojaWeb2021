@@ -55,6 +55,9 @@
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#estados_modal">
                     Alterar Estado
                 </button>
+                <?php if($encomenda->status == 'processamento'): ?>
+                    <a href="?a=imprimir_pdf&i=<?= \core\classes\Store::aesEncriptar($encomenda->id_encomenda) ?>" class="btn btn-primary">Imprimir PDF</a>
+                <?php endif; ?>
             </div>
 
 

@@ -20,7 +20,7 @@
                                 <option <?= ($filtro == 'processamento') ? "selected" : "" ?> value="processamento">Em processamento</option>
                                 <option <?= ($filtro == 'enviada') ? "selected" : "" ?> value="enviada">Enviada</option>
                                 <option <?= ($filtro == 'cancelada') ? "selected" : "" ?> value="cancelada">Cancelada</option>
-                                <option <?= ($filtro == 'finalizada') ? "selected" : "" ?> value="finalizada">Finalizado</option>
+                                <option <?= ($filtro == 'concluida') ? "selected" : "" ?> value="concluida">Concluida</option>
                             </select>
                         </div>
 

@@ -97,29 +97,41 @@ class Encomenda
 
     }
 
-    public function obter_encomendas_por_estado(string $estado): ?array
+    public function obter_encomendas(string $filtro, string $id = ""): ?array
     {
         $db = new DataBase();
+        $sql = "SELECT encomendas.*, clientes.nome, clientes.email FROM encomendas LEFT JOIN clientes ON encomendas.id_cliente = clientes.id_cliente WHERE 1";
 
-        $params = [
-            "status" => $estado
-        ];
+        $params = [];
 
-        if(empty($estado)) {
-            $encomendas = $db->select("SELECT encomendas.*, clientes.nome, clientes.email FROM encomendas LEFT JOIN clientes ON encomendas.id_cliente = clientes.id_cliente ORDER BY data_encomenda DESC");
-        }else{
-            $encomendas = $db->select("SELECT encomendas.*, clientes.nome, clientes.email FROM encomendas LEFT JOIN clientes ON encomendas.id_cliente = clientes.id_cliente WHERE status = :status ORDER BY data_encomenda DESC", $params);
+        if(!empty($filtro)) {
+
+            // Metodo 1
+            //$filtro = filter_var($filtro, FILTER_SANITIZE_STRING);
+            //$sql .= " AND encomendas.status = '$filtro'";
+
+            //Metodo 2
+            $params['filtro'] = $filtro;
+            $sql .= " AND encomendas.status = :filtro";
         }
 
+        if(!empty($id)) {
+            //$id = filter_var($id, FILTER_SANITIZE_STRING);
+            //$sql .= " AND encomendas.id_cliente = $id";
 
+            $params['id'] = $id;
+            $sql .= " AND encomendas.id_cliente = :id";
+        }
 
+        $sql .= " ORDER BY encomendas.data_encomenda DESC";
+
+        $encomendas = $db->select($sql, $params);
 
         if(count($encomendas) <= 0) {
             return null;
         }
 
         return $encomendas;
-
     }
 
     public function total_encomendas_por_estado(string $estado): int {

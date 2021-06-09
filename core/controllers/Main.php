@@ -2,6 +2,7 @@
 
 namespace core\controllers;
 
+use core\classes\PDF;
 use core\classes\Store;
 use core\models\Cliente;
 use core\models\Encomenda;
@@ -254,5 +255,34 @@ class Main
         ];
 
         Store::carregarView($layouts);
+    }
+
+    public function pdf()
+    {
+        $pdf = new PDF();
+
+        $pdf->set_template(getcwd() . "\\" . "assets\\templates\\template.pdf");
+
+
+        $pdf->set_tamanho("10px");
+        $pdf->familia_letra("sans-serif");
+        $pdf->set_weigth("200");
+        $pdf->posicao(110, 175);
+        $pdf->dimensao(500,400);
+        $pdf->escrever_pdf("<h1>O Lorem Ipsum é um texto modelo da indústria tipográfica e de impressão.</h1>");
+
+
+        $pdf->set_tamanho("30px");
+        $pdf->familia_letra("monospace");
+        $pdf->set_weigth("bold");
+        $pdf->posicao(200, 340);
+        $pdf->dimensao(400,120);
+        $pdf->cores("black", "red");
+        $pdf->alinhamento("center");
+        $pdf->escrever_pdf("<h2>Ubuntu</h2>");
+
+
+        $pdf->apresentar_pdf();
+
     }
 }

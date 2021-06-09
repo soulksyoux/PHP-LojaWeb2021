@@ -2,6 +2,7 @@
 
 
 namespace core\controllers;
+use core\classes\PDF;
 use core\classes\Store;
 use core\models\Administrador;
 use core\models\Cliente;
@@ -20,7 +21,7 @@ class Admin
 
         //obter encomendas com estado pendente
         $encomenda_model = new Encomenda();
-        $encomendas = $encomenda_model->obter_encomendas_por_estado("pendente");
+        $encomendas = $encomenda_model->obter_encomendas("pendente");
         $total_encomendas_pendentes = $encomenda_model->total_encomendas_por_estado("pendente");
         $total_encomendas_processamento = $encomenda_model->total_encomendas_por_estado("processamento");
 
@@ -134,16 +135,20 @@ class Admin
         $entradas_filtro = ["pendente" , "processamento", "cancelada", "enviada", "concluida"];
 
         $filtro = "";
-
         if(!empty($_GET["f"])) {
             if(in_array($_GET["f"], $entradas_filtro)) {
                 $filtro = $_GET["f"];
             }
         }
 
+        $id_cliente = "";
+        if(!empty($_GET["id"]) && strlen($_GET["id"]) == 32) {
+            $id_cliente = Store::aesDesencriptar($_GET["id"]);
+        }
+
         //obter encomendas da base de dados baseadas no filtro
         $encomenda_model = new Encomenda();
-        $encomendas = $encomenda_model->obter_encomendas_por_estado($filtro);
+        $encomendas = $encomenda_model->obter_encomendas($filtro, $id_cliente);
 
         $dados = [
             "encomendas" => $encomendas,
@@ -425,6 +430,141 @@ class Admin
         Store::carregarView($layouts, $dados);
 
     }
+
+    public function imprimir_pdf()
+    {
+        if(!Store::adminLogado()) {
+            Store::redirect("login", true);
+            return;
+        }
+
+        if(empty($_GET["i"])) {
+            Store::redirect("inicio", true);
+            return;
+        }
+
+        if(strlen($_GET["i"]) != 32) {
+            Store::redirect("inicio", true);
+            return;
+        }
+
+        $id_encomenda = Store::aesDesencriptar($_GET["i"]);
+
+        $encomenda_model = new Encomenda();
+        $encomenda = $encomenda_model->obter_encomenda_por_id($id_encomenda)[0];
+
+        if(empty($encomenda)) {
+            Store::redirect("inicio", true);
+            return;
+        }
+
+        $cliente_model = new Cliente();
+        $cliente = $cliente_model->recuperaClienteById($encomenda->id_cliente);
+
+        if(empty($cliente)) {
+            Store::redirect("inicio", true);
+            return;
+        }
+
+        $produto_model = new Produto();
+        $produtos = $produto_model->lista_produtos_de_encomenda($id_encomenda);
+
+
+
+        //get dados
+
+        $date = date_create($encomenda->data_encomenda);
+        $data_encomenda = date_format($date,"d/m/Y");
+
+        $cod_encomenda = $encomenda->cod_encomenda;
+
+        $nome_cliente = $cliente->nome;
+        $email_cliente = $cliente->email;
+        $morada_cliente = $encomenda->morada;
+        $cidade_cliente = $encomenda->cidade;
+        $tel_cliente = $encomenda->telefone;
+
+
+        $pdf = new PDF();
+        $pdf->set_template(getcwd() . "/assets/templates/template.pdf");
+
+        //data enc
+        $pdf->dimensao("100", "30");
+        $pdf->posicao("230", "190");
+        $pdf->set_tamanho("14px");
+        $pdf->familia_letra("arial");
+        $pdf->escrever_pdf("<p>$data_encomenda</p>");
+
+        //cod enc
+        $pdf->dimensao("120", "30");
+        $pdf->posicao("560", "190");
+        $pdf->set_tamanho("14px");
+        $pdf->familia_letra("arial");
+        $pdf->escrever_pdf("<p>$cod_encomenda</p>");
+
+        //dados cliente
+        $pdf->dimensao("420", "90");
+        $pdf->posicao("70", "250");
+        $pdf->set_tamanho("12px");
+        $pdf->familia_letra("arial");
+        $pdf->escrever_pdf("<div>
+            <p>$nome_cliente</p>
+            <p>$email_cliente</p>
+            <p>$morada_cliente - $cidade_cliente</p>
+            <p>$tel_cliente</p>
+        </div>");
+
+        //produtos
+
+        $y = 320;
+        $avanco = 80;
+        $total = 0;
+
+        foreach ($produtos as $produto) {
+            $designacao = $produto->designacao_produto;
+            $quantidade = $produto->quantidade;
+            $preco = $produto->preco_unitario;
+
+            $pdf->dimensao("420", "70");
+            $y += $avanco;
+            $pdf->posicao("70", $y);
+            $pdf->alinhamento("left");
+            $pdf->set_tamanho("12px");
+            $pdf->familia_letra("arial");
+            $pdf->escrever_pdf("<div>
+                <p>Designação: $designacao</p>
+                <p>Quantidade: $quantidade</p>
+                <p>Preço unitário: $preco Euros</p>
+            </div>");
+
+            $pdf->dimensao("180", "70");
+            $pdf->posicao("530", $y);
+            $pdf->alinhamento("right");
+            $pdf->set_tamanho("12px");
+            $pdf->familia_letra("arial");
+            $subtotal = $preco * $quantidade;
+            $pdf->escrever_pdf("<div>
+                <br>
+                <br>
+                <p>Sub-total: $subtotal Euros</p>
+            </div>");
+
+
+            $total += $produto->quantidade * $produto->preco_unitario;
+        }
+
+
+        $pdf->dimensao("120", "30");
+        $pdf->posicao("600", "780");
+        $pdf->set_tamanho("14px");
+        $pdf->familia_letra("arial");
+        $pdf->escrever_pdf("<p>Total: <strong>$total</strong> Euros</p>");
+
+
+        $pdf->apresentar_pdf();
+
+    }
+
 
 
 

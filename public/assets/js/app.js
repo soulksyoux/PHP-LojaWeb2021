@@ -267,9 +267,14 @@ $(document).ready( function () {
 
 const filtrarStatus = async () => {
     val = $("#combo-status").val();
-    console.log(val);
 
-    window.location.href = '?a=lista-encomendas&f=' + val;
+    let id = "";
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    id = urlParams.get('id');
+    //console.log(id);
+
+    window.location.href = '?a=lista-encomendas&f=' + val + '&id=' + id;
 }
 
 
